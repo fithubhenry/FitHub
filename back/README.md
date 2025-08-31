@@ -1,0 +1,1 @@
+Agregar notificacioines para no perder entrenamientos
