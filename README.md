@@ -1,7 +1,7 @@
 # FitHub
 Proyecto Final de Henry Grupo 4
  Historias de usuario 
-[Como socio/usuario 
+Como socio/usuario 
 1. Registrarse 
 ○ Como socio quiero crear una cuenta con email o Google para empezar a 
 usar la app. 
