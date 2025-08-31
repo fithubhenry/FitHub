@@ -67,4 +67,4 @@ habilitarlos.
 ○ Como admin quiero responder consultas de socios en el chat para dar 
 soporte rápido. 
 10. Notificaciones masivas 
-● Como admin quiero enviar avisos automáticos o newsletters a los socios. 
+● Como admin quiero enviar avisos automáticos o newsletters a los socios
