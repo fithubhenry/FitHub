@@ -1,1 +1,2 @@
-Agregar notificacioines para no perder entrenamientos
+Hola a todos!
+
