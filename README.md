@@ -1,7 +1,7 @@
 # FitHub
 Proyecto Final de Henry Grupo 4
  Historias de usuario 
-[Como socio/usuario 
+Como socio/usuario 
 1. Registrarse 
 ○ Como socio quiero crear una cuenta con email o Google para empezar a 
 usar la app. 
@@ -67,4 +67,4 @@ habilitarlos.
 ○ Como admin quiero responder consultas de socios en el chat para dar 
 soporte rápido. 
 10. Notificaciones masivas 
-● Como admin quiero enviar avisos automáticos o newsletters a los socios. 
+● Como admin quiero enviar avisos automáticos o newsletters a los socios
