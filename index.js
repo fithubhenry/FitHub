@@ -27,3 +27,12 @@ function laCajaDePandora(numero) {
   }
 }
 
+
+function matias() {
+  return {
+    nombre: "matias",
+    edad: "33",
+    nacionalidad: "argentino",
+  };
+}
+
