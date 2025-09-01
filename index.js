@@ -10,6 +10,12 @@ function laCajaDePandora(numero) {
 }
 
 
+function ale() {
+  return { nombre: 'Ale', edad: 30, nacionalidad: 'Argentina' };
+}
+
+
+
 function juli() {
   return {
     nombre: "Juli",
@@ -34,5 +40,6 @@ function matias() {
     nacionalidad: "argentino",
   };
 }
+
 
 
