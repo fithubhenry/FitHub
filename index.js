@@ -8,3 +8,8 @@ function laCajaDePandora(numero) {
     return num.toString(16);
   }
 }
+
+function ale() {
+  return { nombre: 'Ale', edad: 30, nacionalidad: 'Argentina' };
+}
+
