@@ -8,3 +8,11 @@ function laCajaDePandora(numero) {
     return num.toString(16);
   }
 }
+
+function matias() {
+  return {
+    nombre: "matias",
+    edad: "33",
+    nacionalidad: "argentino",
+  };
+}
