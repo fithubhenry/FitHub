@@ -1,29 +1,11 @@
-
-function laCajaDePandora(numero) {
-
-  if (numero % 2 === 0) {
-
-    return numero.toString(2);
-  } else {
-    return numero.toString(16);
-  }
-}
-
-
-function ale() {
-  return { nombre: 'Ale', edad: 30, nacionalidad: 'Argentina' };
-}
-
-
-
 function juli() {
-  return {
-    nombre: "Juli",
-    edad: 25,         
-    nacionalidad: "Argentina"
-  };
+    return {
+        nombre: "Juli",
+        edad: 25
+    };
 }
 
+// Código de develop
 function xavierManzoco() {
     return {
         nombre: "Xavier Manzoco",
@@ -31,15 +13,3 @@ function xavierManzoco() {
         nacionalidad: "Argentina"
     };
 }
-
-
-function matias() {
-  return {
-    nombre: "matias",
-    edad: "33",
-    nacionalidad: "argentino",
-  };
-}
-
-
-
