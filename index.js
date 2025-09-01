@@ -1,15 +1,45 @@
+
 function laCajaDePandora(numero) {
-  if (typeof num !== "number" || !Number.isInteger(num)) {
-    return "El parámetro debe ser un número entero";
-  }
-  if (num % 2 === 0) {
-    return num.toString(2);
+
+  if (numero % 2 === 0) {
+
+    return numero.toString(2);
   } else {
-    return num.toString(16);
+    return numero.toString(16);
   }
 }
+
 
 function ale() {
   return { nombre: 'Ale', edad: 30, nacionalidad: 'Argentina' };
 }
+
+
+
+function juli() {
+  return {
+    nombre: "Juli",
+    edad: 25,         
+    nacionalidad: "Argentina"
+  };
+}
+
+function xavierManzoco() {
+    return {
+        nombre: "Xavier Manzoco",
+        edad: 29,
+        nacionalidad: "Argentina"
+    };
+}
+
+
+function matias() {
+  return {
+    nombre: "matias",
+    edad: "33",
+    nacionalidad: "argentino",
+  };
+}
+
+
 
