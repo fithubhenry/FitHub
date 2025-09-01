@@ -7,7 +7,7 @@
     "telefono": "111111111",
     "direccion": "Calle 123",
     "ciudad": "Buenos Aires",
-    "rol": "socio",
+    "isAdmin": false,
     "status": "activo"
   },
   {
@@ -18,7 +18,7 @@
     "telefono": "222222222",
     "direccion": "Av. Siempre Viva 742",
     "ciudad": "Córdoba",
-    "rol": "socio",
+    "isAdmin": false,
     "status": "pendiente"
   },
   {
@@ -29,7 +29,7 @@
     "telefono": "333333333",
     "direccion": "Belgrano 456",
     "ciudad": "Rosario",
-    "rol": "socio",
+    "isAdmin": false,
     "status": "activo"
   },
   {
@@ -40,7 +40,7 @@
     "telefono": "444444444",
     "direccion": "Mitre 789",
     "ciudad": "Mendoza",
-    "rol": "socio",
+    "isAdmin": false,
     "status": "activo"
   },
   {
@@ -51,7 +51,7 @@
     "telefono": "555555555",
     "direccion": "San Martín 123",
     "ciudad": "La Plata",
-    "rol": "socio",
+    "isAdmin": false,
     "status": "suspendido"
   },
   {
@@ -62,7 +62,7 @@
     "telefono": "666666666",
     "direccion": "Independencia 321",
     "ciudad": "Mar del Plata",
-    "rol": "socio",
+    "isAdmin": false,
     "status": "activo"
   },
   {
@@ -73,7 +73,7 @@
     "telefono": "777777777",
     "direccion": "Rivadavia 654",
     "ciudad": "Salta",
-    "rol": "socio",
+    "isAdmin": false,
     "status": "activo"
   },
   {
@@ -84,7 +84,7 @@
     "telefono": "888888888",
     "direccion": "Corrientes 987",
     "ciudad": "Neuquén",
-    "rol": "socio",
+    "isAdmin": false,
     "status": "pendiente"
   },
   {
@@ -95,7 +95,7 @@
     "telefono": "999999999",
     "direccion": "Oficina Central",
     "ciudad": "Buenos Aires",
-    "rol": "admin",
+    "isAdmin": true,
     "status": "activo"
   },
   {
@@ -106,7 +106,7 @@
     "telefono": "101010101",
     "direccion": "HQ Central",
     "ciudad": "Buenos Aires",
-    "rol": "admin",
+    "isAdmin": true,
     "status": "activo"
   }
 ]
