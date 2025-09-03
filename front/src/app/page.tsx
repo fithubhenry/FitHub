@@ -78,19 +78,23 @@ export default function Home() {
           </li>
         </ul>
 
-       <ActivityCard
+       
+
+
+          
+      </section>
+      <section className="flex justify-center mb-16">
+        <ActivityCard
           id={1}
           title="Clase Funcional"
           description="Entrenamiento de fuerza y resistencia"
           duration="45 min"
           participants={12}
           intensity="Alta"
-          icon={Dumbbell}            // componente, NO <Dumbbell />
-          image="https://images.unsplash.com/photo-1749640245925-4e31e81c3d38?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"  // que exista en /public
-          />
-
-
-          
+          icon={Dumbbell}
+          image="https://images.unsplash.com/photo-1749640245925-4e31e81c3d38?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          className="max-w-sm w-full bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col items-center p-6"
+        />
       </section>
     </main>
   );
