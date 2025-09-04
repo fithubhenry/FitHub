@@ -1,7 +1,6 @@
 import { IClase } from '@/types';
 
-export const preloadClases = (): IClase[] => {
-  return [
+export const preloadClases: IClase[] = [
     {
       id: "1",
       nombre: "Yoga Flow",
@@ -163,5 +162,5 @@ export const preloadClases = (): IClase[] => {
       image: "pilates2.png"
     }
   ];
-};
+
 

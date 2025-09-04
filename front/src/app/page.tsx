@@ -1,6 +1,4 @@
-import { Dumbbell } from "lucide-react";
-
-
+import { preloadClases } from "@/helpers/preloadClases"; 
 import ActivityCard from "@/components/Cards/ActivityCard";
 
 
@@ -26,73 +24,26 @@ export default function Home() {
             Descubre una amplia variedad de clases diseñadas para todos los niveles. Desde entrenamientos de alta
             intensidad hasta sesiones de relajación y bienestar.
           </p>
-          <input
-            type="text"
-            placeholder="Buscar actividad..."
-            className="mt-6 w-full max-w-md mx-auto px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0070f3]"
-          />
-        </div>
-
-
-        <ul className="grid mb-16 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-4xl mx-auto">
-
-          <li className="flex flex-col items-center justify-center rounded-2xl p-8 shadow-md text-black font-bold text-lg">
-
-            Entrenamiento Funcional
-          </li>
-
-          <li className="flex flex-col items-center justify-center rounded-2xl p-8 shadow-md text-black font-bold text-lg">
-            Spinning
-          </li>
-
-          <li className="flex flex-col items-center justify-center rounded-2xl p-8 shadow-md text-black font-bold text-lg">
-
-            Yoga
-          </li>
-
-          <li className="flex flex-col items-center justify-center rounded-2xl p-8 shadow-md text-black font-bold text-lg">
-
-            Pilates
-          </li>
-
-          <li className="flex flex-col items-center justify-center rounded-2xl p-8 shadow-md text-black font-bold text-lg">
-
-            Crossfit
-          </li>
-
-          <li className="flex flex-col items-center justify-center rounded-2xl p-8 shadow-md text-black font-bold text-lg">
-
-            Zumba
-          </li>
-
-          <li className="flex flex-col items-center justify-center rounded-2xl p-8 shadow-md text-black font-bold text-lg">
-
-            Boxeo
-          </li>
-
-          <li className="flex flex-col items-center justify-center rounded-2xl p-8 shadow-md text-black font-bold text-lg">
-
-            Estiramientos
-          </li>
-        </ul>
-
-       
-
-
           
+        </div>
+        
+          <div className="grid mb-16 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          {preloadClases.map((clase) => (
+            <ActivityCard
+              key={clase.id}
+              id={clase.id}
+              nombre={clase.nombre}
+              descripcion={clase.descripcion}
+              duracion={clase.duracion}
+              participantes={clase.participantes}
+              intensidad={clase.intensidad}
+              image={`/images/${clase.image}`} // ojo: debe existir la imagen en /public/images
+              instructor={""} horario={""} capacidad={0} tipo={"Yoga"} grupo_musculo={"Pierna"} sub_musculo={"biceps"} sede={""}            />
+          ))}
+        </div>
       </section>
-      <section className="flex justify-center mb-16">
-        <ActivityCard
-          id={1}
-          title="Clase Funcional"
-          description="Entrenamiento de fuerza y resistencia"
-          duration="45 min"
-          participants={12}
-          intensity="Alta"
-          icon={Dumbbell}
-          image="https://images.unsplash.com/photo-1749640245925-4e31e81c3d38?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-      </section>
+
+
     </main>
   );
 }

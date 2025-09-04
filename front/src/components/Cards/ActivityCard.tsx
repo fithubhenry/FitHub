@@ -1,74 +1,59 @@
-// "use client"; // solo si vas a manejar estado, onClick, localStorage, etc.
+import { IClase } from "@/types";
+import { Clock, Dumbbell, Users } from "lucide-react";
 
-import { Clock, Users } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 
-interface ActivityCardProps {
-  id: number;
-  title: string;
-  description: string;
-  duration: string;
-  participants: number;
-  intensity: "Muy Alta" | "Alta" | "Media" | "Baja";
-  icon: LucideIcon;   // componente de icono (p.ej. Dumbbell)
-  image: string;      // ruta dentro de /public o URL absoluta
-}
 
-const intensityStyles: Record<ActivityCardProps["intensity"], string> = {
-  "Muy Alta": "bg-red-100 text-red-800",
-  "Alta": "bg-orange-100 text-orange-800",
-  "Media": "bg-yellow-100 text-yellow-800",
-  "Baja": "bg-green-100 text-green-800",
+const intensityStyles: Record<IClase["intensidad"], string> = {
+  "muy alta": "bg-red-100 text-red-800",
+  "alta": "bg-orange-100 text-orange-800",
+  "media": "bg-yellow-100 text-yellow-800",
+  "baja": "bg-green-100 text-green-800",
 };
 
-const ActivityCard: React.FC<ActivityCardProps> = ({
-  title,
-  description,
-  duration,
-  participants,
-  intensity,
-  icon: IconComponent,
+const ActivityCard: React.FC<IClase> = ({
+  nombre,
+  descripcion,
+  duracion,
+  participantes,
+  intensidad,
   image,
 }) => {
   return (
     <div className="group rounded-xl border border-border/60 bg-white shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 overflow-hidden">
-      {/* Imagen + overlay + icono */}
       <div className="relative h-48 overflow-hidden">
         <img
           src={image || "/placeholder.svg"}
-          alt={title}
+          alt={nombre}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-black/20 transition-colors duration-300 group-hover:bg-black/10" />
         <div className="absolute top-4 right-4 rounded-full bg-black/60 backdrop-blur-sm p-2">
-          {/* 👇 El icono debe ser AUTOCERRADO y sin hijos */}
-          <IconComponent className="h-5 w-5 text-white" />
+          <Dumbbell className="h-5 w-5 text-white" />
         </div>
       </div>
 
-      {/* Contenido */}
       <div className="p-4 space-y-4">
         <div>
           <h3 className="text-lg font-bold leading-snug group-hover:text-primary transition-colors">
-            {title}
+            {nombre}
           </h3>
-          <p className="text-sm text-muted-foreground line-clamp-2">{description}</p>
+          <p className="text-sm text-muted-foreground line-clamp-2">{descripcion}</p>
         </div>
 
         <div className="flex justify-between text-sm text-muted-foreground">
           <div className="flex items-center gap-1.5">
             <Clock className="h-4 w-4" />
-            <span>{duration}</span>
+            <span>{duracion}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <Users className="h-4 w-4" />
-            <span>{participants}</span>
+            <span>{participantes}</span>
           </div>
         </div>
 
        <div className="mt-4">
-  <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${intensityStyles[intensity]}`}>
-    Intensidad: {intensity}
+  <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${intensityStyles[intensidad]}`}>
+    Intensidad: {intensidad}
   </span>
 </div>
 <button
