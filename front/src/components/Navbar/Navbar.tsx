@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { Menu, X, Dumbbell } from "lucide-react"
+import Link from "next/link"
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -15,27 +16,24 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-            {/* <Dumbbell className="h-8 w-8 text-[#fee600]" /> */}
+          <Link href="/">
             <span className="font-anton text-3xl font-bold tracking-widest text-[#fee600]">FITHUB</span>
+            </Link>
           </div>
 
-          {/* Desktop Navigation */}
+          
           <div className="hidden md:flex items-center space-x-8">
-            <a href="#inicio" className=" text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
+            <Link href="/">
+            <p className=" text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
               Inicio
-            </a>
-            <a href="#actividades" className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
-              Actividades
-            </a>
-            <a href="#horarios" className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
-              Horarios
-            </a>
-            <a href="#contacto" className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
-              Contacto
-            </a>
-            <button className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
-              Únete Ahora
-            </button>
+            </p>
+            </Link>
+            <Link href="/clases">
+            <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
+              Clases
+            </p>
+            </Link>
+          
           </div>
 
           {/* Mobile menu button */}
