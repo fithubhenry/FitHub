@@ -15,7 +15,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Pierna",
       sub_musculo: "biceps",
       sede: "Sede A",
-      image: "yoga1.png"
+      image: "/yoga-flow.png"
     },
     {
       id: "2",
@@ -31,7 +31,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Brazos",
       sub_musculo: "triceps",
       sede: "Sede B",
-      image: "hiit1.png"
+      image: "hiitexplosivo.png"
     },
     {
       id: "3",
@@ -47,7 +47,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Pierna",
       sub_musculo: "cuadriceps",
       sede: "Sede A",
-      image: "spin1.png"
+      image: "spinningcardio.jpg"
     },
     {
       id: "4",
@@ -63,7 +63,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Abdomen",
       sub_musculo: "abdominal",
       sede: "Sede B",
-      image: "pilates1.png"
+      image: "pilatescore.jpg"
     },
     {
       id: "5",
@@ -79,7 +79,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Cardio",
       sub_musculo: "gluteo",
       sede: "Sede A",
-      image: "zumba1.png"
+      image: "zumbafitness.png"
     },
     {
       id: "6",
@@ -93,9 +93,9 @@ export const preloadClases: IClase[] = [
       participantes: 14,
       tipo: "Yoga",
       grupo_musculo: "Brazos",
-      sub_musculo: "biceps",
-      sede: "Sede A",
-      image: "yoga2.png"
+      sub_musculo: "triceps",
+      sede: "Sede B",
+      image: "boxeotecnico.png"
     },
     {
       id: "7",
@@ -107,27 +107,27 @@ export const preloadClases: IClase[] = [
       duracion: "60 min",
       capacidad: 15,
       participantes: 12,
-      tipo: "Crossfit",
-      grupo_musculo: "Brazos",
-      sub_musculo: "triceps",
-      sede: "Sede B",
-      image: "crossfit1.png"
+      tipo: "Funcional",
+      grupo_musculo: "Espalda",
+      sub_musculo: "dorsal",
+      sede: "Sede A",
+      image: "funcionalavanzado.png"
     },
     {
       id: "8",
-      nombre: "Spinning Cardio",
-      descripcion: "Clase de spinning para mejorar resistencia cardiovascular",
-      intensidad: "alta",
-      instructor: "Carla Ruiz",
-      horario: "2025-09-05 10:00",
-      duracion: "50 min",
-      capacidad: 25,
-      participantes: 22,
-      tipo: "Spinning",
-      grupo_musculo: "Pierna",
-      sub_musculo: "cuadriceps",
-      sede: "Sede A",
-      image: "spin2.png"
+      nombre: "Yoga Restaurativo",
+      descripcion: "Yoga suave para relajación y recuperación",
+      intensidad: "baja",
+      instructor: "Sofía Herrera",
+      horario: "2025-09-04 15:00",
+      duracion: "75 min",
+      capacidad: 15,
+      participantes: 8,
+      tipo: "Yoga",
+      grupo_musculo: "Espalda",
+      sub_musculo: "dorsal",
+      sede: "Sede B",
+      image: "yogarestaurativo.png"
     },
     {
       id: "9",
@@ -137,29 +137,29 @@ export const preloadClases: IClase[] = [
       instructor: "Andrés López",
       horario: "2025-09-05 11:00",
       duracion: "60 min",
-      capacidad: 18,
-      participantes: 12,
+      capacidad: 20,
+      participantes: 18,
+      tipo: "Crossfit",
+      grupo_musculo: "Glúteos",
+      sub_musculo: "gluteo",
+      sede: "Sede A",
+      image: "crossfitwod.png"
+    },
+    {
+      id: "10",
+      nombre: "Pilates Mat",
+      descripcion: "Pilates en colchoneta para principiantes",
+      intensidad: "baja",
+      instructor: "Elena Torres",
+      horario: "2025-09-04 17:00",
+      duracion: "45 min",
+      capacidad: 20,
+      participantes: 15,
       tipo: "Pilates",
       grupo_musculo: "Abdomen",
       sub_musculo: "abdominal",
       sede: "Sede B",
-      image: "pilates2.png"
-    },
-    {
-      id: "10",
-      nombre: "Zumba Fiesta",
-      descripcion: "Clase de Zumba con música latina",
-      intensidad: "media",
-      instructor: "Laura Gómez",
-      horario: "2025-09-05 17:00",
-      duracion: "55 min",
-      capacidad: 30,
-      participantes: 28,
-      tipo: "Zumba",
-      grupo_musculo: "Pierna",
-      sub_musculo: "gluteo",
-      sede: "Sede A",
-      image: "zumba2.png"
+      image: "pilatesmat.png"
     }
   ];
 
