@@ -15,7 +15,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Pierna",
       sub_musculo: "biceps",
       sede: "Sede A",
-      image: "yoga1.png"
+      image: "/yoga-flow.png"
     },
     {
       id: "2",
@@ -31,7 +31,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Brazos",
       sub_musculo: "triceps",
       sede: "Sede B",
-      image: "hiit1.png"
+      image: "hiitexplosivo.png"
     },
     {
       id: "3",
@@ -47,71 +47,71 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Pierna",
       sub_musculo: "cuadriceps",
       sede: "Sede A",
-      image: "spin1.png"
+      image: "spinningcardio.jpg"
     },
     {
       id: "4",
       nombre: "Pilates Core",
-      descripcion: "Fortalecimiento del core y estabilidad",
+      descripcion: "Ejercicios de Pilates para fortalecer el core",
       intensidad: "media",
-      instructor: "María Fernández",
+      instructor: "Andrés López",
       horario: "2025-09-04 11:00",
-      duracion: "55 min",
+      duracion: "60 min",
       capacidad: 18,
-      participantes: 14,
+      participantes: 10,
       tipo: "Pilates",
       grupo_musculo: "Abdomen",
       sub_musculo: "abdominal",
       sede: "Sede B",
-      image: "pilates1.png"
+      image: "pilatescore.jpg"
     },
     {
       id: "5",
-      nombre: "Zumba Fitness",
-      descripcion: "Baile aeróbico con ritmos latinos",
+      nombre: "Zumba Fiesta",
+      descripcion: "Clase de Zumba con música latina",
       intensidad: "alta",
       instructor: "Diego Martínez",
       horario: "2025-09-04 12:00",
-      duracion: "45 min",
+      duracion: "55 min",
       capacidad: 30,
       participantes: 25,
       tipo: "Zumba",
       grupo_musculo: "Cardio",
       sub_musculo: "gluteo",
       sede: "Sede A",
-      image: "zumba1.png"
+      image: "zumbafitness.png"
     },
     {
       id: "6",
-      nombre: "Boxeo Técnico",
-      descripcion: "Técnicas de boxeo y defensa personal",
-      intensidad: "alta",
-      instructor: "Roberto Silva",
+      nombre: "Yoga Flow", 
+      descripcion: "Sesión de yoga enfocada en la respiración y flexibilidad",
+      intensidad: "media",
+      instructor: "Laura Gómez",
       horario: "2025-09-04 13:00",
       duracion: "60 min",
       capacidad: 12,
-      participantes: 10,
-      tipo: "Boxeo",
+      participantes: 14,
+      tipo: "Yoga",
       grupo_musculo: "Brazos",
       sub_musculo: "triceps",
       sede: "Sede B",
-      image: "boxeo1.png"
+      image: "boxeotecnico.png"
     },
     {
       id: "7",
-      nombre: "Funcional Avanzado",
-      descripcion: "Entrenamiento funcional con movimientos complejos",
-      intensidad: "muy alta",
-      instructor: "Ana López",
-      horario: "2025-09-04 14:00",
-      duracion: "50 min",
-      capacidad: 16,
+      nombre: "Crossfit Fuerza",
+      descripcion: "Entrenamiento funcional para fuerza total",
+      intensidad: "alta",
+      instructor: "Juan Pérez",
+      horario: "2025-09-05 09:30",
+      duracion: "60 min",
+      capacidad: 15,
       participantes: 12,
       tipo: "Funcional",
       grupo_musculo: "Espalda",
       sub_musculo: "dorsal",
       sede: "Sede A",
-      image: "funcional1.png"
+      image: "funcionalavanzado.png"
     },
     {
       id: "8",
@@ -127,15 +127,15 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Espalda",
       sub_musculo: "dorsal",
       sede: "Sede B",
-      image: "yoga2.png"
+      image: "yogarestaurativo.png"
     },
     {
       id: "9",
-      nombre: "Crossfit WOD",
-      descripcion: "Workout of the Day - Entrenamiento del día",
-      intensidad: "muy alta",
-      instructor: "Carlos Mendoza",
-      horario: "2025-09-04 16:00",
+      nombre: "Pilates Flex",
+      descripcion: "Pilates para aumentar flexibilidad y equilibrio",
+      intensidad: "media",
+      instructor: "Andrés López",
+      horario: "2025-09-05 11:00",
       duracion: "60 min",
       capacidad: 20,
       participantes: 18,
@@ -143,7 +143,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Glúteos",
       sub_musculo: "gluteo",
       sede: "Sede A",
-      image: "crossfit1.png"
+      image: "crossfitwod.png"
     },
     {
       id: "10",
@@ -159,7 +159,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Abdomen",
       sub_musculo: "abdominal",
       sede: "Sede B",
-      image: "pilates2.png"
+      image: "pilatesmat.png"
     }
   ];
 
