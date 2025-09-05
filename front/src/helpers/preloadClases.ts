@@ -1,7 +1,6 @@
 import { IClase } from '@/types';
 
-export const preloadClases : IClase[] =  
-[
+export const preloadClases: IClase[] = [
     {
       id: "1",
       nombre: "Yoga Flow",

@@ -1,5 +1,6 @@
 'use client';
-import { preloadClases } from '@/helpers/clases';
+
+import { preloadClases } from '@/helpers/preloadClases';
 import { useState } from 'react';
 
 
