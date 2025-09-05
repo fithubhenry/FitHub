@@ -15,7 +15,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Pierna",
       sub_musculo: "biceps",
       sede: "Sede A",
-      image: "yoga1.png"
+      image: "/yoga-flow.png"
     },
     {
       id: "2",
@@ -31,7 +31,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Brazos",
       sub_musculo: "triceps",
       sede: "Sede B",
-      image: "hiit1.png"
+      image: "hiitexplosivo.png"
     },
     {
       id: "3",
@@ -47,7 +47,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Pierna",
       sub_musculo: "cuadriceps",
       sede: "Sede A",
-      image: "spin1.png"
+      image: "spinningcardio.jpg"
     },
     {
       id: "4",
@@ -63,7 +63,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Abdomen",
       sub_musculo: "abdominal",
       sede: "Sede B",
-      image: "pilates1.png"
+      image: "pilatescore.jpg"
     },
     {
       id: "5",
@@ -79,7 +79,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Cardio",
       sub_musculo: "gluteo",
       sede: "Sede A",
-      image: "zumba1.png"
+      image: "zumbafitness.png"
     },
     {
       id: "6",
@@ -95,7 +95,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Brazos",
       sub_musculo: "triceps",
       sede: "Sede B",
-      image: "boxeo1.png"
+      image: "boxeotecnico.png"
     },
     {
       id: "7",
@@ -111,7 +111,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Espalda",
       sub_musculo: "dorsal",
       sede: "Sede A",
-      image: "funcional1.png"
+      image: "funcionalavanzado.png"
     },
     {
       id: "8",
@@ -127,7 +127,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Espalda",
       sub_musculo: "dorsal",
       sede: "Sede B",
-      image: "yoga2.png"
+      image: "yogarestaurativo.png"
     },
     {
       id: "9",
@@ -143,7 +143,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Glúteos",
       sub_musculo: "gluteo",
       sede: "Sede A",
-      image: "crossfit1.png"
+      image: "crossfitwod.png"
     },
     {
       id: "10",
@@ -159,7 +159,7 @@ export const preloadClases: IClase[] = [
       grupo_musculo: "Abdomen",
       sub_musculo: "abdominal",
       sede: "Sede B",
-      image: "pilates2.png"
+      image: "pilatesmat.png"
     }
   ];
 

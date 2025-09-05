@@ -37,7 +37,7 @@ export default function Home() {
               duracion={clase.duracion}
               participantes={clase.participantes}
               intensidad={clase.intensidad}
-              image={`/images/${clase.image}`} // ojo: debe existir la imagen en /public/images
+              image={`${clase.image}`} // ojo: debe existir la imagen en /public/images
               instructor={""} horario={""} capacidad={0} tipo={"Yoga"} grupo_musculo={"Pierna"} sub_musculo={"biceps"} sede={""}            />
           ))}
         </div>
