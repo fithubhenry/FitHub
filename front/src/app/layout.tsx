@@ -33,20 +33,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
+      {/* 👇 el body define la grilla: header | contenido | footer */}
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${anton.variable} ${poppins.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${anton.variable} ${poppins.variable} antialiased min-h-screen grid grid-rows-[auto_1fr_auto] m-0`}
       >
-         <Navbar />
-        {children}
-          <Footer />
+        <Navbar />
+
+       <main className="flex-1">{children}</main>
+
+        <Footer />
       </body>
-    
-  
     </html>
   );
 }
