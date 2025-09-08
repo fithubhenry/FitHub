@@ -78,14 +78,14 @@ export default function ClasesFilterView() {
       )
     );
 
- const buscar = async () => {
-  setLoading(true);
-  await new Promise((r) => setTimeout(r, 300));
-  const data = applyFilters(preloadClases);
-  setResultados(data); // ← NO mostrar allClases si no hay resultados
-  if (!allClases.length) setAllClases(preloadClases);
-  setLoading(false);
-};
+  const buscar = async () => {
+    setLoading(true);
+    await new Promise((r) => setTimeout(r, 300));
+    const data = applyFilters(preloadClases);
+    setResultados(data); // ← NO mostrar allClases si no hay resultados
+    if (!allClases.length) setAllClases(preloadClases);
+    setLoading(false);
+  };
 
 
   const resetFilters = () => {
@@ -160,15 +160,23 @@ export default function ClasesFilterView() {
             <article
               className="mt-5 grid grid-cols-1 md:grid-cols-[minmax(280px,340px)_1fr] rounded-3xl bg-white ring-1 ring-black/5 overflow-hidden"
             >
-              <div className="p-0 flex justify-center">
+              <div className="p-0 flex justify-center w-full min-h-[280px] max-h-[320px] bg-neutral-50">
                 <Image
                   src={`/${String(act.image).replace(/^\//, "")}`}
                   alt={act.nombre}
-                  width={1200}
-                  height={800}
-                  className="block w-auto h-auto max-h-[320px] object-contain"
+                  width={340}
+                  height={240}
+                  className="block object-contain w-full h-full"
+                  style={{
+                    maxWidth: '340px',
+                    maxHeight: '320px',
+                    minHeight: '280px'
+                  }}
                   sizes="(max-width: 768px) 100vw, 340px"
-                  priority={false}
+                  onLoadingComplete={(img) => {
+                    // Forzar redimensionamiento después de carga
+                    img.style.opacity = '1';
+                  }}
                 />
               </div>
 
