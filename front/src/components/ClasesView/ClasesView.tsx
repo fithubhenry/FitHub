@@ -77,17 +77,15 @@ export default function ClasesView() {
       )
     );
 
-  // simulación de búsqueda (con fallback a todo si no hay resultados)
-  const buscar = async () => {
-    setLoading(true);
-    await new Promise((r) => setTimeout(r, 300));
-    const data = applyFilters(preloadClases);
-    setResultados(
-      data.length ? data : allClases.length ? allClases : preloadClases
-    );
-    if (!allClases.length) setAllClases(preloadClases);
-    setLoading(false);
-  };
+ const buscar = async () => {
+  setLoading(true);
+  await new Promise((r) => setTimeout(r, 300));
+  const data = applyFilters(preloadClases);
+  setResultados(data); // ← NO mostrar allClases si no hay resultados
+  if (!allClases.length) setAllClases(preloadClases);
+  setLoading(false);
+};
+
 
   const resetFilters = () => {
     setFilters(INITIAL_FILTERS);
