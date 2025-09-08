@@ -8,7 +8,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
-  
+
 
   return (
     <nav className="sticky top-0 z-50 bg-black border-b border-border">
@@ -16,29 +16,29 @@ export default function Navbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center space-x-2">
-          <Link href="/">
-            <span className="font-anton text-3xl font-bold tracking-widest text-[#fee600]">FITHUB</span>
+            <Link href="/">
+              <span className="font-anton text-3xl font-bold tracking-widest text-[#fee600]">FITHUB</span>
             </Link>
           </div>
 
-          
+
           <div className="hidden md:flex items-center space-x-8">
             <Link href="/">
-            <p className=" text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
-              Inicio
-            </p>
+              <p className=" text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
+                Inicio
+              </p>
             </Link>
             <Link href="/clases">
-            <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
-              Clases
-            </p>
+              <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
+                Clases
+              </p>
             </Link>
-          
+
           </div>
 
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button onClick={toggleMenu} className="text-white hover:text-primary">
+            <button onClick={toggleMenu} className="text-[#fee600] hover:text-primary">
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
@@ -48,34 +48,24 @@ export default function Navbar() {
         {isMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-black border-t border-border">
-              <a
-                href="#inicio"
-                className="block px-3 py-2 text-white hover:text-primary transition-colors duration-200"
-                onClick={toggleMenu}
-              >
-                Inicio
-              </a>
-              <a
-                href="#actividades"
-                className="block px-3 py-2 text-white hover:text-primary transition-colors duration-200"
-                onClick={toggleMenu}
-              >
-                Actividades
-              </a>
-              <a
-                href="#horarios"
-                className="block px-3 py-2 text-white hover:text-primary transition-colors duration-200"
-                onClick={toggleMenu}
-              >
-                Horarios
-              </a>
-              <a
-                href="#contacto"
-                className="block px-3 py-2 text-white hover:text-primary transition-colors duration-200"
-                onClick={toggleMenu}
-              >
-                Contacto
-              </a>
+              <Link href="/">
+                <p
+
+                  className="block px-3 py-2 text-[#fee600] hover:text-primary transition-colors duration-200"
+                  onClick={toggleMenu}
+                >
+                  Inicio
+                </p>
+              </Link>
+              <Link href="/clases">
+                <p
+
+                  className="block px-3 py-2 text-[#fee600] hover:text-primary transition-colors duration-200"
+                  onClick={toggleMenu}
+                >
+                  Actividades
+                </p>
+              </Link>
               <div className="px-3 py-2">
                 <button className="w-full bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
                   Únete Ahora
