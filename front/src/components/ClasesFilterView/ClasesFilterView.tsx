@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import { preloadClases } from "@/helpers/preloadClases";
 import { IClase } from "@/types";
+import Link from "next/link";
 
 type Filters = {
   tipo: string;
@@ -28,7 +29,7 @@ const SELECTS: { key: keyof Filters; label: string }[] = [
   { key: "instructor", label: "Instructor" },
 ];
 
-export default function ClasesView() {
+export default function ClasesFilterView() {
   const [filters, setFilters] = useState<Filters>(INITIAL_FILTERS);
   const [allClases, setAllClases] = useState<IClase[]>([]);
   const [resultados, setResultados] = useState<IClase[]>([]);
@@ -155,43 +156,44 @@ export default function ClasesView() {
       {/* Cards horizontales: imagen sin recorte y altura limitada (sin “huecos”) */}
       <section className="mt-6 space-y-6">
         {resultados.map((act) => (
-          <article
-            key={act.id}
-            className="grid grid-cols-1 md:grid-cols-[minmax(280px,340px)_1fr] rounded-3xl bg-white ring-1 ring-black/5 overflow-hidden"
-          >
-            <div className="p-0 flex justify-center">
-              <Image
-                src={`/${String(act.image).replace(/^\//, "")}`}
-                alt={act.nombre}
-                width={1200}
-                height={800}
-                className="block w-auto h-auto max-h-[320px] object-contain"
-                sizes="(max-width: 768px) 100vw, 340px"
-                priority={false}
-              />
-            </div>
-
-            <div className="p-5 md:p-6 flex flex-col justify-center gap-2">
-              <h3 className="text-xl font-semibold leading-tight">
-                {act.nombre}
-              </h3>
-              <p className="text-sm text-neutral-600">{act.descripcion}</p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-1 text-sm text-neutral-800 mt-2">
-                <Meta k="Tipo" v={act.tipo} />
-                <Meta k="Intensidad" v={act.intensidad} />
-                <Meta k="Duración" v={act.duracion} />
-                <Meta k="Instructor" v={act.instructor} />
-                <Meta k="Horario" v={act.horario} />
-                <Meta k="Sede" v={act.sede} />
-                <Meta
-                  k="Grupo/Submúsculo"
-                  v={`${act.grupo_musculo} / ${act.sub_musculo}`}
-                  span
+          <Link key={act.id} href={`/clases/${act.id}`}>
+            <article
+              className="mt-5 grid grid-cols-1 md:grid-cols-[minmax(280px,340px)_1fr] rounded-3xl bg-white ring-1 ring-black/5 overflow-hidden"
+            >
+              <div className="p-0 flex justify-center">
+                <Image
+                  src={`/${String(act.image).replace(/^\//, "")}`}
+                  alt={act.nombre}
+                  width={1200}
+                  height={800}
+                  className="block w-auto h-auto max-h-[320px] object-contain"
+                  sizes="(max-width: 768px) 100vw, 340px"
+                  priority={false}
                 />
               </div>
-            </div>
-          </article>
+
+              <div className="p-5 md:p-6 flex flex-col justify-center gap-2">
+                <h3 className="text-xl font-semibold leading-tight">
+                  {act.nombre}
+                </h3>
+                <p className="text-sm text-neutral-600">{act.descripcion}</p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-1 text-sm text-neutral-800 mt-2">
+                  <Meta k="Tipo" v={act.tipo} />
+                  <Meta k="Intensidad" v={act.intensidad} />
+                  <Meta k="Duración" v={act.duracion} />
+                  <Meta k="Instructor" v={act.instructor} />
+                  <Meta k="Horario" v={act.horario} />
+                  <Meta k="Sede" v={act.sede} />
+                  <Meta
+                    k="Grupo/Submúsculo"
+                    v={`${act.grupo_musculo} / ${act.sub_musculo}`}
+                    span
+                  />
+                </div>
+              </div>
+            </article>
+          </Link>
         ))}
       </section>
     </div>
