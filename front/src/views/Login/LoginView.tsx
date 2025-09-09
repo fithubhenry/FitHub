@@ -90,7 +90,6 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
                   {isSubmitting ? 'Validando...' : 'Iniciar Sesión'}
                 </button>
               </div>
-
               {/* Enlace a registro */}
               <div className="text-center">
                 <p className="text-white text-sm">
