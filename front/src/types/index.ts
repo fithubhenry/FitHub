@@ -22,6 +22,8 @@ export interface IRegisterUser {
   birthdate: string;  
   email: string;
   password: string;
+  confirmPassword: string;
+  city: string;
   address: string;
   phone: string;
 }
