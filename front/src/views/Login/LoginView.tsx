@@ -1,5 +1,6 @@
 'use client'
 
+import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
 import { ValidateLoginUser } from "@/helpers/validators";
 import { ILoginUser } from "@/types";
 import { Formik, Form } from "formik";
@@ -153,7 +154,6 @@ const LoginView = () => {
                   {isSubmitting ? 'Validando...' : 'Iniciar Sesión'}
                 </button>
               </div>
-
               {/* Enlace a registro */}
               <div className="text-center">
                 <p className="text-white text-sm">

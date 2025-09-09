@@ -14,7 +14,7 @@ export async function register(userData: IRegisterUser) {
         });
         const parsedResponse = await response.json()
         if (parsedResponse.name) {
-            toast.success("Usuario registrado correctamente")
+            toast.success("Usuario registrado correctament")
             return response.json();
         } else {
             toast.error("Fallo al registrar el usuario");
