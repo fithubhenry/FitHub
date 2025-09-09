@@ -1,6 +1,7 @@
 'use client'
 
-import { ValidateLoginUser } from "@/helpers/validators";
+
+import { validateFormLogin } from "@/helpers/validate";
 import { ILoginUser } from "@/types";
 import { Formik, Form } from "formik";
 import { useState } from "react";
@@ -33,7 +34,7 @@ const LoginView = () => {
             email: '',
             password: ''
           }}
-          validate={ValidateLoginUser}
+          validationSchema={validateFormLogin}
           onSubmit={(values, { setSubmitting }) => {
             console.log('Valores del formulario:', values);
             console.log('Formulario válido - listo para enviar al backend cuando esté disponible');

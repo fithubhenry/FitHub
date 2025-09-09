@@ -46,6 +46,8 @@ const RegisterView = () => {
         >
           {({ isSubmitting, touched, errors, values, handleChange, handleBlur }) => (
             <Form className="space-y-6">
+              
+              {/* Campo Nombre */}
               <div>
                 <label htmlFor="name" className="block text-[#fee600] font-medium text-sm mb-2">
                   Nombre
@@ -112,6 +114,7 @@ const RegisterView = () => {
                 )}
               </div>
 
+              {/* Campo Contraseña */}
               <div>
                 <label htmlFor="password" className="block text-[#fee600] font-medium text-sm mb-2">
                   Contraseña
