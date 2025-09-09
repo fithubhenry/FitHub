@@ -17,12 +17,15 @@ export interface IClase {
 }
 
 export interface IRegisterUser {
-    name: string;
-    email: string;
-    password: string;
-    address: string;
-    phone: string;
+  name: string;
+  lastname: string;
+  birthdate: string;  
+  email: string;
+  password: string;
+  address: string;
+  phone: string;
 }
+
 
 export interface ILoginUser {
     email: string;
