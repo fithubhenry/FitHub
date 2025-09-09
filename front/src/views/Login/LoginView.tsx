@@ -153,7 +153,6 @@ const LoginView = () => {
                   {isSubmitting ? 'Validando...' : 'Iniciar Sesión'}
                 </button>
               </div>
-
               {/* Enlace a registro */}
               <div className="text-center">
                 <p className="text-white text-sm">
