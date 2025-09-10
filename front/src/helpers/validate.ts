@@ -19,32 +19,32 @@ export const validateFormRegister = yup.object({
         .oneOf([yup.ref('password')], 'Las contraseñas deben coincidir')
         .required('La confirmación de la contraseña es obligatoria'),
 
-    name: yup.string()
+    nombre: yup.string()
         .min(3, 'El nombre debe tener al menos 3 caracteres')
         .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'El nombre solo puede contener letras')
         .required('El nombre es obligatorio'),
 
-    lastname: yup.string()
+    apellido: yup.string()
         .min(4, 'El apellido debe tener al menos 4 caracteres')
         .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'El apellido solo puede contener letras')
         .required('El apellido es obligatorio'),
 
-    birthdate: yup.string()
+    fecha_nacimiento: yup.string()
         .required('La fecha de nacimiento es requerida')
         .test('is-valid-date', 'La fecha no es válida', (value) => {
             if (!value) return false;
             return !isNaN(new Date(value).getTime());
         }),
 
-    city: yup.string()
+    ciudad: yup.string()
         .min(3, 'La ciudad debe tener al menos 3 caracteres')
         .required('La ciudad es obligatoria'),
 
-    address: yup.string()
+    direccion: yup.string()
         .min(5, 'La dirección debe tener al menos 5 caracteres')
         .required('La dirección es obligatoria'),
 
-    phone: yup.string()
+    telefono: yup.string()
         .matches(/^\+?[0-9]+$/, 'El teléfono solo puede contener números')
         .required('El teléfono es obligatorio'),
 });

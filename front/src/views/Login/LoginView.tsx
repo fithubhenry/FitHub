@@ -6,9 +6,12 @@ import { login } from "@/services/authService";
 import { ILoginUser } from "@/types";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const LoginView = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+  
   const handleGoogleLogin = () => {
     console.log('Iniciando sesión con Google...');
     // Aquí tu lógica de autenticación
@@ -41,8 +44,22 @@ const LoginView = () => {
           }}
           validationSchema={validateFormLogin}
           onSubmit={async (values, { setSubmitting }) => {
-            await login(values);
-            setSubmitting(false);
+            try {
+              // Llamamos al servicio de login
+              const response = await login(values);
+              
+              // Si el login fue exitoso (200), redirigimos al home
+              if (response && (response.status === 200 || response.status === 201)) {
+                // Redirigir al home después de un pequeño delay para mostrar el mensaje
+                setTimeout(() => {
+                  router.push('/');
+                }, 1000);
+              }
+            } catch (error) {
+              console.error("Error en el login:", error);
+            } finally {
+              setSubmitting(false);
+            }
           }}
         >
           {({ isSubmitting }) => (

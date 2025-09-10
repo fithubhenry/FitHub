@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { IRegisterUser } from "@/types";
 import { validateFormRegister } from "@/helpers/validate";
 import { register } from "@/services/authService";
@@ -10,20 +11,22 @@ import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
 
 
 interface RegisterFormValues {
-  name: string;
-  lastname: string;
-  birthdate: string; 
+  nombre: string;
+  apellido: string;
+  fecha_nacimiento: string; 
   email: string;
   password: string;
   confirmPassword: string;
-  city: string;
-  address: string;
-  phone: string;
+  ciudad: string;
+  direccion: string;
+  telefono: string;
 }
 
 const RegisterView = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const router = useRouter();
+  
   const handleGoogleRegister = () => {
     console.log('Iniciando sesión con Google...');
     // Aquí tu lógica de autenticación
@@ -47,25 +50,42 @@ const RegisterView = () => {
 
         <Formik<RegisterFormValues>
           initialValues={{
-            name: "",
-            lastname: "",
-            birthdate: "",
+            nombre: "",
+            apellido: "",
+            fecha_nacimiento: "",
             email: "",
             password: "",
             confirmPassword: "",
-            city: "",
-            address: "",
-            phone: ""
+            ciudad: "",
+            direccion: "",
+            telefono: ""
           }}
           validationSchema={validateFormRegister}
           onSubmit={async (values, { setSubmitting }) => {
             try {
               // Convertimos los valores del formulario al tipo IRegisterUser
               const payload: IRegisterUser = {
-                ...values,
-                birthdate: values.birthdate ? new Date(values.birthdate) : null
+                nombre: values.nombre,
+                apellido: values.apellido,
+                password: values.password,
+                confirmPassword: values.confirmPassword,
+                telefono: parseInt(values.telefono),
+                fecha_nacimiento: values.fecha_nacimiento,
+                email: values.email,
+                direccion: values.direccion,
+                ciudad: values.ciudad
               };
-              await register(payload);
+              
+              // Llamamos al servicio de registro
+              const response = await register(payload);
+              
+              // Si el registro fue exitoso (200 o 201), redirigimos al login
+              if (response && (response.status === 200 || response.status === 201)) {
+                // Redirigir al login después de un pequeño delay para mostrar el mensaje
+                setTimeout(() => {
+                  router.push('/login');
+                }, 1000);
+              }
             } catch (error) {
               console.error("Error en el registro:", error);
               // Maneja el error, muestra mensaje al usuario, etc.
@@ -80,14 +100,14 @@ const RegisterView = () => {
               <div className="sm:col-span-1">
                 <label className="block mb-1 text-sm font-medium text-[#fee600]">Nombre:</label>
                 <Field
-                  name="name"
+                  name="nombre"
                   type="text"
                   placeholder="Tu nombre"
                   className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300
 focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
                 />
                 <div className="h-5">
-                  <ErrorMessage name="name" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="nombre" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
               </div>
 
@@ -95,14 +115,14 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
               <div className="sm:col-span-1">
                 <label className="block mb-1 text-sm font-medium text-[#fee600]">Apellido:</label>
                 <Field
-                  name="lastname"
+                  name="apellido"
                   type="text"
                   placeholder="Tu apellido"
                   className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300
 focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
                 />
                 <div className="h-5">
-                  <ErrorMessage name="lastname" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="apellido" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
               </div>
 
@@ -110,13 +130,13 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
               <div className="sm:col-span-1">
                 <label className="block mb-1 text-sm font-medium text-[#fee600]">Fecha de nacimiento:</label>
                 <Field
-                  name="birthdate"
+                  name="fecha_nacimiento"
                   type="date"
                   className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300
 focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
                 />
                 <div className="h-5">
-                  <ErrorMessage name="birthdate" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="fecha_nacimiento" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
               </div>
 
@@ -187,14 +207,14 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
               <div className="sm:col-span-1">
                 <label className="block mb-1 text-sm font-medium text-[#fee600]">Ciudad:</label>
                 <Field
-                  name="city"
+                  name="ciudad"
                   type="text"
                   placeholder="Ciudad"
                   className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300
 focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
                 />
                 <div className="h-5">
-                  <ErrorMessage name="city" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="ciudad" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
               </div>
 
@@ -202,14 +222,14 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
               <div className="sm:col-span-1">
                 <label className="block mb-1 text-sm font-medium text-[#fee600]">Dirección:</label>
                 <Field
-                  name="address"
+                  name="direccion"
                   type="text"
                   placeholder="Av. Siempre Viva 742"
                   className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300
 focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
                 />
                 <div className="h-5">
-                  <ErrorMessage name="address" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="direccion" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
               </div>
 
@@ -217,14 +237,14 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
               <div className="sm:col-span-2">
                 <label className="block mb-1 text-sm font-medium text-[#fee600]">Teléfono:</label>
                 <Field
-                  name="phone"
+                  name="telefono"
                   type="text"
                   placeholder="+54 9 11 1234 5678"
                   className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300
 focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
                 />
                 <div className="h-5">
-                  <ErrorMessage name="phone" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="telefono" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
               </div>
 
