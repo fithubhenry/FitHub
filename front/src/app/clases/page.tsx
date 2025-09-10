@@ -1,10 +1,6 @@
-import ClasesFilterView from '@/views/ClasesFilterView/ClasesFilterView'
-import React from 'react'
+import ClasesFilterView from "@/views/ClasesFilterView/ClasesFilterView";
 
-function clases() {
-  return (
-    <ClasesFilterView />
-  )
+export default function Page() {
+ 
+  return <ClasesFilterView  />;
 }
-
-export default clases

@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/footer/footer";
 import { Slide, ToastContainer } from "react-toastify";
-
+import { RoleProvider } from "@/context/RoleContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,14 +19,14 @@ const geistMono = Geist_Mono({
 const anton = Anton({
   variable: "--font-anton",
   subsets: ["latin"],
-  weight: ["400"], 
-})
+  weight: ["400"],
+});
 
 const poppins = Poppins({
   variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["400", "600", "700"],
-})
+});
 
 export const metadata: Metadata = {
   title: "FitHub",
@@ -42,24 +42,25 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${anton.variable} ${poppins.variable} antialiased min-h-screen grid grid-rows-[auto_1fr_auto] m-0`}
       >
-        <Navbar />
+        <RoleProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
 
-       <main className="flex-1">{children}</main>
-
-        <Footer />
-        <ToastContainer
-          position="bottom-center"
-          autoClose={2000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss={false}
-          draggable={false}
-          pauseOnHover={false}
-          theme="dark"
-          transition={Slide}
-        />
+          <Footer />
+          <ToastContainer
+            position="bottom-center"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={false}
+            rtl={false}
+            pauseOnFocusLoss={false}
+            draggable={false}
+            pauseOnHover={false}
+            theme="dark"
+            transition={Slide}
+          />
+        </RoleProvider>
       </body>
     </html>
   );
