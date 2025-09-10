@@ -5,6 +5,8 @@ const APIURL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function register(userData: IRegisterUser) {
   try {
+    console.log("Intentando registrar con:", userData);
+
     const response = await fetch(`https://fithub-back-dev.onrender.com/auth/register`, {
       method: "POST",
       headers: {
