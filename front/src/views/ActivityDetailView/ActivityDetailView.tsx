@@ -1,23 +1,23 @@
 "use client";
 import { IClase } from "@/types";
-import { Clock, Users } from "lucide-react";
-import React from "react";
 import Image from "next/image";
+import { Clock, Users } from "lucide-react";
+import { useRole } from "@/context/RoleContext";
+
+type Props = IClase;
 
 const intensityStyles: Record<IClase["intensidad"], string> = {
   "muy alta": "bg-red-100 text-black",
-  "alta": "bg-orange-100 text-black",
-  "media": "bg-yellow-100 text-black",
-  "baja": "bg-green-100 text-black",
+  alta: "bg-orange-100 text-black",
+  media: "bg-yellow-100 text-black",
+  baja: "bg-green-100 text-black",
 };
 
-const ActivityDetailView: React.FC<IClase> = ({
-  
+function ActivityDetailView({
   nombre,
   descripcion,
   duracion,
   participantes,
-  capacidad,
   intensidad,
   image,
   instructor,
@@ -26,73 +26,58 @@ const ActivityDetailView: React.FC<IClase> = ({
   grupo_musculo,
   sub_musculo,
   sede,
-}) => {
-  return (
-    <div className="max-w-3xl w-full mt-12 mb-12 mx-auto bg-white rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row">
-      {/* Imagen principal al costado */}
-      <div className="md:w-1/2 w-full h-96 md:h-auto relative flex-shrink-0">
-        <Image
-          src={`/${image}`}
-          alt={nombre}
-          fill
-          className="object-cover"
-          priority
-        />
-      </div>
+}: Props) {
+  // usar el contexto para decidir si puede reservar
+  const { role } = useRole();
+  const canReserve = role === "premium";
+  const disabled = !canReserve;
 
-      {/* Contenido */}
-      <div className="p-8 space-y-6 flex-1">
-        <div>
-          <h2 className="text-2xl font-bold mb-2">{nombre}</h2>
-          <p className="text-gray-700 text-base">{descripcion}</p>
+  return (
+    <div className="max-w-5xl mx-auto p-6 bg-white rounded-xl shadow">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
+          <Image src={`/${image || "placeholder.svg"}`} alt={nombre} fill className="object-cover" />
         </div>
 
-        {/* Datos principales */}
-        <div className="grid grid-cols-2 gap-4 text-base text-gray-600">
-          <div className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-gray-500" />
-            <span>{duracion}</span>
+        <div className="space-y-3">
+          <h2 className="text-2xl font-bold">{nombre}</h2>
+          <p className="text-gray-700">{descripcion}</p>
+
+          <div className="flex gap-6 text-sm text-gray-600">
+            <span className="flex items-center gap-1"><Clock className="h-4 w-4" />{duracion}</span>
+            <span className="flex items-center gap-1"><Users className="h-4 w-4" />{participantes} inscriptos</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-gray-500" />
-            <span>
-              {participantes}/{capacidad} inscriptos
+
+          <div className="mt-2">
+            <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${intensityStyles[intensidad]}`}>
+              Intensidad: {intensidad}
             </span>
           </div>
-          <div className="flex items-center gap-2">
-            <span>Instructor: {instructor}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-gray-500" />
-            <span>Horario: {horario}</span>
-          </div>
-        </div>
 
-        {/* Extra info */}
-        <div className="text-base text-gray-500">
-          <p>Tipo: {tipo}</p>
-          <p>Grupo muscular: {grupo_musculo}</p>
-          <p>Músculo específico: {sub_musculo}</p>
-          <p>Sede: {sede}</p>
-        </div>
+          <div className="text-sm text-gray-600">
+            <p>Instructor: {instructor}</p>
+            <p>Horario: {horario}</p>
+            <p>Tipo: {tipo}</p>
+            <p>Grupo muscular: {grupo_musculo}</p>
+            <p>Músculo específico: {sub_musculo}</p>
+            <p>Sede: {sede}</p>
+          </div>
 
-        {/* Intensidad */}
-        <div>
-          <span
-            className={`inline-block px-4 py-1 rounded-full text-base font-semibold ${intensityStyles[intensidad]}`}
+          <button
+            type="button"
+            disabled={disabled}
+            className={`mt-3 w-full rounded-md px-4 py-2.5 text-sm font-semibold shadow-sm focus:outline-none focus:ring-2 focus:ring-yellow-500/50
+              ${disabled ? "bg-neutral-300 text-neutral-500 cursor-not-allowed"
+                         : "bg-[#fee600] text-black hover:bg-black hover:text-[#fee600]"}`}
           >
-            Intensidad: {intensidad}
-          </span>
+            {disabled ? "Solo Premium" : "Reservar Clase"}
+          </button>
         </div>
-
-        {/* Botón */}
-        <button
-          className="mt-3 w-full rounded-md bg-[#fee600] px-4 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-black hover:text-[#fee600] focus:outline-none focus:ring-2 focus:ring-yellow-500/50">
-          Reservar Clase
-        </button>
       </div>
     </div>
   );
-};
+}
+
+
 
 export default ActivityDetailView;
