@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: fithub-front
+    env: static
+    branch: develop # o la rama principal de tu frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: fithub-back-dev.onrender.com # URL pública del backend
