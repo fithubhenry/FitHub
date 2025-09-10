@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { preloadClases } from "@/helpers/preloadClases";
-import ActivityDetailView from "@/components/ActivityDetailView/ActivityDetailView";
+import ActivityDetailView from "@/views/ActivityDetailView/ActivityDetailView";
 
 
 export default function ClaseDetallePage() {

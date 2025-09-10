@@ -21,15 +21,20 @@ export const validateFormRegister = yup.object({
 
     name: yup.string()
         .min(3, 'El nombre debe tener al menos 3 caracteres')
+        .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'El nombre solo puede contener letras')
         .required('El nombre es obligatorio'),
 
     lastname: yup.string()
         .min(4, 'El apellido debe tener al menos 4 caracteres')
+        .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'El apellido solo puede contener letras')
         .required('El apellido es obligatorio'),
 
-    birthdate: yup.date()
-        .max(new Date(), 'La fecha de nacimiento no puede ser en el futuro')
-        .required('La fecha de nacimiento es obligatoria'),
+    birthdate: yup.string()
+        .required('La fecha de nacimiento es requerida')
+        .test('is-valid-date', 'La fecha no es válida', (value) => {
+            if (!value) return false;
+            return !isNaN(new Date(value).getTime());
+        }),
 
     city: yup.string()
         .min(3, 'La ciudad debe tener al menos 3 caracteres')
@@ -40,6 +45,7 @@ export const validateFormRegister = yup.object({
         .required('La dirección es obligatoria'),
 
     phone: yup.string()
+        .matches(/^\+?[0-9]+$/, 'El teléfono solo puede contener números')
         .required('El teléfono es obligatorio'),
 });
 

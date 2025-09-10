@@ -19,7 +19,7 @@ export interface IClase {
 export interface IRegisterUser {
   name: string;
   lastname: string;
-  birthdate: string;  
+  birthdate: Date | null;  
   email: string;
   password: string;
   confirmPassword: string;
@@ -32,4 +32,9 @@ export interface IRegisterUser {
 export interface ILoginUser {
     email: string;
     password: string;
+}
+
+export interface GoogleButtonProps {
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  text?: string;
 }

@@ -1,12 +1,18 @@
 'use client'
 
+import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
 import { validateFormLogin } from "@/helpers/validate";
+import { login } from "@/services/authService";
 import { ILoginUser } from "@/types";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState } from "react";
 
 const LoginView = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const handleGoogleLogin = () => {
+    console.log('Iniciando sesión con Google...');
+    // Aquí tu lógica de autenticación
+  };
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center py-8 px-4">
@@ -34,8 +40,8 @@ const LoginView = () => {
             password: ''
           }}
           validationSchema={validateFormLogin}
-          onSubmit={(values, { setSubmitting }) => {
-            console.log('Valores del formulario:', values);
+          onSubmit={async (values, { setSubmitting }) => {
+            await login(values);
             setSubmitting(false);
           }}
         >
@@ -78,12 +84,12 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
 
               {/* Botón */}
               <div>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={isSubmitting}
                   className={`w-full py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200
-                    ${isSubmitting 
-                      ? 'bg-gray-600 cursor-not-allowed text-gray-300' 
+                    ${isSubmitting
+                      ? 'bg-gray-600 cursor-not-allowed text-gray-300'
                       : 'bg-[#fee600] text-black hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#fee600] shadow-lg hover:shadow-xl'
                     }`}
                 >
@@ -91,19 +97,29 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
                 </button>
               </div>
               {/* Enlace a registro */}
-              <div className="text-center">
-                <p className="text-white text-sm">
-                  ¿No tienes una cuenta?{' '}
-                  <a href="/register" className="text-[#fee600] hover:text-yellow-400 font-medium transition-colors duration-200">
-                    Regístrate aquí
-                  </a>
-                </p>
-              </div>
+
             </Form>
+
           )}
         </Formik>
+        <div className="mt-4">
+          <GoogleButton
+            onClick={handleGoogleLogin}
+            text="Iniciar sesión con Google"
+
+          />
+        </div>
+        <div className="text-center mt-4">
+          <p className="text-white text-sm">
+            ¿No tienes una cuenta?{' '}
+            <a href="/register" className="text-[#fee600] hover:text-yellow-400 font-medium transition-colors duration-200">
+              Regístrate aquí
+            </a>
+          </p>
+        </div>
       </div>
     </div>
+
   );
 };
 
