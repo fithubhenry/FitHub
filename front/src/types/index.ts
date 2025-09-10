@@ -17,15 +17,15 @@ export interface IClase {
 }
 
 export interface IRegisterUser {
-  name: string;
-  lastname: string;
-  birthdate: Date | null;  
-  email: string;
+  nombre: string;
+  apellido: string;
   password: string;
   confirmPassword: string;
-  city: string;
-  address: string;
-  phone: string;
+  telefono: number;
+  fecha_nacimiento: string;
+  email: string;
+  direccion: string;
+  ciudad: string;
 }
 
 

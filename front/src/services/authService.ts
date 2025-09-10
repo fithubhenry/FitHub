@@ -7,7 +7,7 @@ export async function register(userData: IRegisterUser) {
   try {
     console.log("Intentando registrar con:", userData);
 
-    const response = await fetch(`https://fithub-back-dev.onrender.com/auth/register`, {
+    const response = await fetch(`${APIURL}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +24,11 @@ export async function register(userData: IRegisterUser) {
     // Si el backend devuelve el objeto usuario creado
     if (parsedResponse && parsedResponse.id) {
       toast.success("Usuario registrado correctamente");
-      return parsedResponse; // devolvés el usuario creado
+      // Devolvemos la respuesta completa con el status
+      return {
+        ...parsedResponse,
+        status: response.status
+      };
     } else {
       toast.error("Fallo al registrar el usuario");
     }
@@ -39,7 +43,7 @@ export async function login(userData: ILoginUser) {
   try {
     console.log("Intentando loguear con:", userData);
 
-    const response = await fetch("https://fithub-back-dev.onrender.com/auth/login", {
+    const response = await fetch(`${APIURL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -58,7 +62,11 @@ export async function login(userData: ILoginUser) {
       localStorage.setItem("token", parsedResponse.access_token);
 
       toast.success("Usuario logueado correctamente");
-      return parsedResponse;
+      // Devolvemos la respuesta completa con el status
+      return {
+        ...parsedResponse,
+        status: response.status
+      };
     } else {
       toast.error("Fallo al loguear el usuario");
     }
