@@ -5,10 +5,29 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState } from "react";
 import { IRegisterUser } from "@/types";
 import { validateFormRegister } from "@/helpers/validate";
+import { register } from "@/services/authService";
+import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
+
+
+interface RegisterFormValues {
+  name: string;
+  lastname: string;
+  birthdate: string; 
+  email: string;
+  password: string;
+  confirmPassword: string;
+  city: string;
+  address: string;
+  phone: string;
+}
 
 const RegisterView = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const handleGoogleRegister = () => {
+    console.log('Iniciando sesión con Google...');
+    // Aquí tu lógica de autenticación
+  };
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center py-8 px-4">
@@ -20,13 +39,13 @@ const RegisterView = () => {
         </div>
 
         <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold mb-4 text-center text-[#fee600]">Registro</h2>
-        <p className="text-white text-lg">
-          Completa tus datos para empezar a entrenar con nosotros
+          <h2 className="text-3xl font-bold mb-4 text-center text-[#fee600]">Registro</h2>
+          <p className="text-white text-lg">
+            Completa tus datos para empezar a entrenar con nosotros
           </p>
         </div>
 
-        <Formik<IRegisterUser>
+        <Formik<RegisterFormValues>
           initialValues={{
             name: "",
             lastname: "",
@@ -40,9 +59,19 @@ const RegisterView = () => {
           }}
           validationSchema={validateFormRegister}
           onSubmit={async (values, { setSubmitting }) => {
-            const payload = { ...values, birthdate: new Date(values.birthdate) };
-            console.log("Valores:", payload);
-            setSubmitting(false);
+            try {
+              // Convertimos los valores del formulario al tipo IRegisterUser
+              const payload: IRegisterUser = {
+                ...values,
+                birthdate: values.birthdate ? new Date(values.birthdate) : null
+              };
+              await register(payload);
+            } catch (error) {
+              console.error("Error en el registro:", error);
+              // Maneja el error, muestra mensaje al usuario, etc.
+            } finally {
+              setSubmitting(false);
+            }
           }}
         >
           {({ isSubmitting }) => (
@@ -102,7 +131,7 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
 focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
                 />
                 <div className="h-5">
-                <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
               </div>
 
@@ -126,7 +155,7 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
                   </button>
                 </div>
                 <div className="h-5">
-                <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
               </div>
 
@@ -150,7 +179,7 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
                   </button>
                 </div>
                 <div className="h-5">
-                <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
               </div>
 
@@ -165,7 +194,7 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
 focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
                 />
                 <div className="h-5">
-                <ErrorMessage name="city" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="city" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
               </div>
 
@@ -180,7 +209,7 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
 focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
                 />
                 <div className="h-5">
-                <ErrorMessage name="address" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="address" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
               </div>
 
@@ -195,7 +224,7 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
 focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
                 />
                 <div className="h-5">
-                <ErrorMessage name="phone" component="div" className="text-red-500 text-sm mt-1" />
+                  <ErrorMessage name="phone" component="div" className="text-red-500 text-sm mt-1" />
                 </div>
               </div>
 
@@ -212,7 +241,14 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
             </Form>
           )}
         </Formik>
+        
+        <div className="mt-4">
+          <GoogleButton
+            onClick={handleGoogleRegister}
+            text="Registrate con Google"
 
+          />
+        </div>
         <div className="text-center text-white mt-3">
           ¿Ya tienes cuenta?{" "}
           <Link href="/login" className="text-[#fee600] hover:text-yellow-400 font-medium transition-colors duration-200">Inicia sesión</Link>

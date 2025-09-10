@@ -1,9 +1,10 @@
 "use client";
-import Image from "next/image";
+
 import { useEffect, useMemo, useState } from "react";
 import { preloadClases } from "@/helpers/preloadClases";
 import { IClase } from "@/types";
-import Link from "next/link";
+import ActivityCard from "@/components/Cards/ActivityCard";
+
 
 type Filters = {
   tipo: string;
@@ -154,56 +155,20 @@ export default function ClasesFilterView() {
       {!loading && resultados.length === 0 && <p>No hay resultados</p>}
 
       {/* Cards horizontales: imagen sin recorte y altura limitada (sin “huecos”) */}
-      <section className="mt-6 space-y-6">
-        {resultados.map((act) => (
-          <Link key={act.id} href={`/clases/${act.id}`}>
-            <article
-              className="mt-5 grid grid-cols-1 md:grid-cols-[minmax(280px,340px)_1fr] rounded-3xl bg-white ring-1 ring-black/5 overflow-hidden"
-            >
-              <div className="p-0 flex justify-center w-full min-h-[280px] max-h-[320px] bg-neutral-50">
-                <Image
-                  src={`/${String(act.image).replace(/^\//, "")}`}
-                  alt={act.nombre}
-                  width={340}
-                  height={240}
-                  className="block object-contain w-full h-full"
-                  style={{
-                    maxWidth: '340px',
-                    maxHeight: '320px',
-                    minHeight: '280px'
-                  }}
-                  sizes="(max-width: 768px) 100vw, 340px"
-                  onLoadingComplete={(img) => {
-                    // Forzar redimensionamiento después de carga
-                    img.style.opacity = '1';
-                  }}
-                />
-              </div>
-
-              <div className="p-5 md:p-6 flex flex-col justify-center gap-2">
-                <h3 className="text-xl font-semibold leading-tight">
-                  {act.nombre}
-                </h3>
-                <p className="text-sm text-neutral-600">{act.descripcion}</p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-1 text-sm text-neutral-800 mt-2">
-                  <Meta k="Tipo" v={act.tipo} />
-                  <Meta k="Intensidad" v={act.intensidad} />
-                  <Meta k="Duración" v={act.duracion} />
-                  <Meta k="Instructor" v={act.instructor} />
-                  <Meta k="Horario" v={act.horario} />
-                  <Meta k="Sede" v={act.sede} />
-                  <Meta
-                    k="Grupo/Submúsculo"
-                    v={`${act.grupo_musculo} / ${act.sub_musculo}`}
-                    span
-                  />
-                </div>
-              </div>
-            </article>
-          </Link>
+      <div className="grid mb-16 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+        {resultados.map((clase) => (
+          <ActivityCard
+              key={clase.id}
+              id={clase.id}
+              nombre={clase.nombre}
+              descripcion={clase.descripcion}
+              duracion={clase.duracion}
+              participantes={clase.participantes}
+              intensidad={clase.intensidad}
+              image={`${clase.image}`} // ojo: debe existir la imagen en /public/images
+              instructor={""} horario={""} capacidad={0} tipo={"Yoga"} grupo_musculo={"Pierna"} sub_musculo={"biceps"} sede={""}            />
         ))}
-      </section>
+      </div>
     </div>
   );
 }

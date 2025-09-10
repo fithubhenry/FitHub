@@ -34,12 +34,12 @@ export default function Navbar() {
             </Link>
 
             <Link href="/login">
-              <button className="px-4 py-2 rounded-md bg-[#fee600] text-black font-semibold hover:bg-yellow-400 transition">
+              <button className="px-4 py-2 rounded-md border border-[#fee600] text-[#fee600] font-semibold hover:bg-[#fee600] hover:text-black transition  cursor-pointer">
                 Login
               </button>
             </Link>
             <Link href="/register">
-              <button className="px-4 py-2 rounded-md border border-[#fee600] text-[#fee600] font-semibold hover:bg-[#fee600] hover:text-black transition">
+              <button className="px-4 py-2 rounded-md border border-[#fee600] text-[#fee600] font-semibold hover:bg-[#fee600] hover:text-black transition  cursor-pointer">
                 Register
               </button>
             </Link>
