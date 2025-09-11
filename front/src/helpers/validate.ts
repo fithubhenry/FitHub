@@ -12,7 +12,12 @@ export const validateFormRegister = yup.object({
         .required('El email es obligatorio'),
 
     password: yup.string()
-        .min(6, 'La contraseña debe tener al menos 6 caracteres')
+        .min(8, 'La contraseña debe tener al menos 8 caracteres')
+        .max(20, 'La contraseña no puede tener más de 20 caracteres')
+        .matches(/[A-Z]/, 'La contraseña debe tener al menos una letra mayúscula')
+        .matches(/[a-z]/, 'La contraseña debe tener al menos una letra minúscula')
+        .matches(/\d/, 'La contraseña debe tener al menos un número')
+        .matches(/[@$!%*?&]/, 'La contraseña debe tener al menos un carácter especial (@, $, !, %, *, ?, &)')
         .required('La contraseña es obligatoria'),
 
     confirmPassword: yup.string()

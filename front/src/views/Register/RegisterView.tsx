@@ -27,10 +27,6 @@ const RegisterView = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
   
-  const handleGoogleRegister = () => {
-    console.log('Iniciando sesión con Google...');
-    // Aquí tu lógica de autenticación
-  };
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center py-8 px-4">
@@ -55,7 +51,7 @@ const RegisterView = () => {
             fecha_nacimiento: "",
             email: "xavim15@gmail.com",
             password: "123456",
-            confirmPassword: "123456",
+            confirmPassword: "T!aA123",
             ciudad: "Pergamino",
             direccion: "11 de septiembre 234",
             telefono: "2477681549"
@@ -265,7 +261,6 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
         <div className="mt-4">
           <GoogleButton
             onClick={() => {
-              // Redirige directo al backend
               window.location.href = "https://fithub-back-pv0m.onrender.com/auth/google";
             }}
             text="Registrarse con Google"
