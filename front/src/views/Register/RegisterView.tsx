@@ -27,10 +27,6 @@ const RegisterView = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
   
-  const handleGoogleRegister = () => {
-    console.log('Iniciando sesión con Google...');
-    // Aquí tu lógica de autenticación
-  };
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center py-8 px-4">
@@ -50,15 +46,15 @@ const RegisterView = () => {
 
         <Formik<RegisterFormValues>
           initialValues={{
-            nombre: "",
-            apellido: "",
+            nombre: "Xavier",
+            apellido: "Manzoco",
             fecha_nacimiento: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-            ciudad: "",
-            direccion: "",
-            telefono: ""
+            email: "xavim15@gmail.com",
+            password: "123456",
+            confirmPassword: "T!aA123",
+            ciudad: "Pergamino",
+            direccion: "11 de septiembre 234",
+            telefono: "2477681549"
           }}
           validationSchema={validateFormRegister}
           onSubmit={async (values, { setSubmitting }) => {
@@ -264,9 +260,10 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
         
         <div className="mt-4">
           <GoogleButton
-            onClick={handleGoogleRegister}
-            text="Registrate con Google"
-
+            onClick={() => {
+              window.location.href = "https://fithub-back-pv0m.onrender.com/auth/google";
+            }}
+            text="Registrarse con Google"
           />
         </div>
         <div className="text-center text-white mt-3">

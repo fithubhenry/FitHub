@@ -75,4 +75,3 @@ export async function login(userData: ILoginUser) {
     throw new Error(error);
   }
 }
-
