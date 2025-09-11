@@ -2,7 +2,7 @@
 
 import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
 import { validateFormLogin } from "@/helpers/validate";
-import { login, loginWithGoogle } from "@/services/authService";
+import { login, } from "@/services/authService";
 import { ILoginUser } from "@/types";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState } from "react";
@@ -12,13 +12,13 @@ const LoginView = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   
-  const handleGoogleLogin = async () => {
-  try {
-    await loginWithGoogle(); // 🚀 dispara el flujo de Google
-  } catch (error) {
-    console.error("Error al iniciar login con Google:", error);
-  }
-};
+//   const handleGoogleLogin = async () => {
+//   try {
+//     await loginWithGoogle(); // 🚀 dispara el flujo de Google
+//   } catch (error) {
+//     console.error("Error al iniciar login con Google:", error);
+//   }
+// };
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center py-8 px-4">
@@ -42,8 +42,8 @@ const LoginView = () => {
 
         <Formik<ILoginUser>
           initialValues={{
-            email: '',
-            password: ''
+            email: 'usuario@ejemplo.com',
+            password: 'Test123!'
           }}
           validationSchema={validateFormLogin}
           onSubmit={async (values, { setSubmitting }) => {
@@ -124,8 +124,11 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
         </Formik>
         <div className="mt-4">
           <GoogleButton
-          onClick={handleGoogleLogin}
-          text="Iniciar sesión con Google"
+            onClick={() => {
+              // Redirige directo al backend
+              window.location.href = "https://fithub-back-pv0m.onrender.com/auth/google";
+            }}
+            text="Iniciar sesión con Google"
           />
         </div>
         <div className="text-center mt-4">

@@ -5,6 +5,7 @@ import ActivityDetailView from "@/views/ActivityDetailView/ActivityDetailView";
 
 
 export default function ClaseDetallePage() {
+  
   const { id } = useParams<{ id: string }>();
   
 
