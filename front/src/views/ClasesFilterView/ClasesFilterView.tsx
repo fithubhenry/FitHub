@@ -125,7 +125,7 @@ export default function ClasesFilterView() {
 
       <div className="flex items-center gap-3">
         <button
-          className="px-4 py-2 bg-black text-white rounded"
+          className="px-4 py-2 bg-black text-white rounded cursor-pointer"
           onClick={buscar}
           disabled={loading}
         >
@@ -135,7 +135,7 @@ export default function ClasesFilterView() {
         {hasFilters && (
           <button
             onClick={resetFilters}
-            className="px-4 py-2 rounded border border-neutral-300 hover:bg-neutral-50"
+            className="px-4 py-2 rounded border border-neutral-300 hover:bg-neutral-50 cursor-pointer"
           >
             Reiniciar filtros
           </button>

@@ -100,7 +100,7 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`w-full py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200
+                  className={`w-full py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200 hover: cursor-pointer
                     ${isSubmitting
                       ? 'bg-gray-600 cursor-not-allowed text-gray-300'
                       : 'bg-[#fee600] text-black hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#fee600] shadow-lg hover:shadow-xl'
