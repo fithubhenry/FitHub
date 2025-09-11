@@ -1,28 +1,27 @@
+// app/auth/callback/page.tsx
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+
+// Esto evita el prerender y obliga a render en cliente
+export const dynamic = "force-dynamic";
 
 export default function GoogleCallbackPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
-    if (!searchParams) return;
-
-    const token = searchParams.get("token");
+    // Captura el token desde la query string
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
 
     if (token) {
-      // Guardar JWT en localStorage
       localStorage.setItem("token", token);
-
-      // Redirigir al dashboard o página principal
-      router.replace("/");
+      router.replace("/dashboard"); // redirige al dashboard
     } else {
-      // Si no hay token, redirigir a login
       router.replace("/login");
     }
-  }, [searchParams, router]);
+  }, [router]);
 
   return <p>Procesando login con Google...</p>;
 }
