@@ -11,14 +11,7 @@ import { useRouter } from "next/navigation";
 const LoginView = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  
-//   const handleGoogleLogin = async () => {
-//   try {
-//     await loginWithGoogle(); // 🚀 dispara el flujo de Google
-//   } catch (error) {
-//     console.error("Error al iniciar login con Google:", error);
-//   }
-// };
+
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center py-8 px-4">
