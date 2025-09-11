@@ -1,10 +1,10 @@
 import { GoogleButtonProps } from "@/types";
 
-export const GoogleButton = ({ text = "Registrarse con Google" }: GoogleButtonProps) => {
+export const GoogleButton = ({ text = "Registrarse con Google", onClick }: GoogleButtonProps) => {
   return (
     <button
       type="button"
-      
+      onClick={onClick}      
       className="w-full rounded-lg flex items-center justify-center gap-3 bg-white border border-gray-300 text-black py-2 px-4 hover:bg-gray-50 transition-colors duration-200 font-medium shadow-sm"
     >
       <svg className="w-5 h-5" viewBox="0 0 24 24">
