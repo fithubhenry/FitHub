@@ -4,6 +4,7 @@ import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
 import { validateFormLogin } from "@/helpers/validate";
 import { login, } from "@/services/authService";
 import { ILoginUser } from "@/types";
+import { useAuth } from "@/context/AuthContext";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -11,6 +12,7 @@ import { useRouter } from "next/navigation";
 const LoginView = () => {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const { login: loginContext } = useAuth();
 
 
   return (
@@ -43,10 +45,9 @@ const LoginView = () => {
             try {
               // Llamamos al servicio de login
               const response = await login(values);
-              
-              // Si el login fue exitoso (200), redirigimos al home
-              if (response && (response.status === 200 || response.status === 201)) {
-                // Redirigir al home después de un pequeño delay para mostrar el mensaje
+              // Si el login fue exitoso (200), actualizamos el contexto y redirigimos
+              if (response && response.access_token && (response.status === 200 || response.status === 201)) {
+                loginContext(response.access_token);
                 setTimeout(() => {
                   router.push('/');
                 }, 1000);

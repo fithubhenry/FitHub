@@ -38,3 +38,18 @@ export interface GoogleButtonProps {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   text?: string;
 }
+
+export type User = {
+  userId: string;
+  email: string;
+  esAdmin: boolean;
+  estado: 'Activo' | 'Inactivo' | 'Suspendido' | 'Invitado';
+};
+
+export type AuthContextType = {
+  user: User | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  login: (token: string) => void;
+  logout: () => void;
+};

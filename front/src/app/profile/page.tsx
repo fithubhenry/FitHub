@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
-import { useRole } from "@/context/RoleContext";
+import { useAuth } from "@/context/AuthContext";
 import ProfileView from "@/views/ProfileView/ProfileView";
 
 export default function Page() {
-  const { role } = useRole();
+  const { user, isAuthenticated } = useAuth();
 
-  if (role === "guest") {
+  if (!isAuthenticated) {
     return (
       <div className="p-6">
         <h1 className="text-xl font-bold mb-2">Necesitas iniciar sesión</h1>

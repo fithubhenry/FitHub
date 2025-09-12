@@ -1,12 +1,25 @@
 "use client";
 
-import { preloadClases } from "@/helpers/preloadClases";
+import { useEffect, useState } from "react";
+import { getClases } from "@/services/clasesService";
 import ActivityCard from "@/components/Cards/ActivityCard";
-
+import { IClase } from "@/types";
 
 export default function Home() {
-  
+  const [clases, setClases] = useState<IClase[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await getClases();
+        setClases(data);
+      } catch {
+        setClases([]);
+      }
+      setLoading(false);
+    })();
+  }, []);
 
   return (
     <main>
@@ -33,14 +46,18 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="grid mb-16 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-          {preloadClases.map((clase) => (
-            <ActivityCard
-              key={clase.id}
-              {...clase}               // pasá todos los campos de la clase
-            />
-          ))}
-        </div>
+        {loading ? (
+          <p className="text-center">Cargando actividades...</p>
+        ) : (
+          <div className="grid mb-16 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            {clases.map((clase) => (
+              <ActivityCard
+                key={clase.id}
+                {...clase}
+              />
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );

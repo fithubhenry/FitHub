@@ -3,16 +3,19 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
-import { useRole } from "@/context/RoleContext"; // 👈 NUEVO
+import { useAuth } from "@/context/AuthContext";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  // 👇 lógica de rol
-  const { role, setRole } = useRole();
-  const isGuest = role === "guest";
-  const isPremium = role === "premium";
+  // Estado del usuario desde AuthContext
+  const { user, isAuthenticated, logout } = useAuth();
+
+  // Determina el rol según el estado del usuario
+  const isGuest = !isAuthenticated;
+  const isRegistered = user?.estado === "Invitado";
+  const isPremium = user?.estado === "Activo";
 
   return (
     <nav className="sticky top-0 z-50 bg-black border-b border-border">
@@ -34,14 +37,15 @@ export default function Navbar() {
                 Inicio
               </p>
             </Link>
+            {!isGuest && (
+              <Link href="/clases">
+                <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
+                  Clases
+                </p>
+              </Link>
+            )}
 
-            <Link href="/clases">
-              <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
-                Clases
-              </p>
-            </Link>
-
-            {/* Links por rol */}
+            {/* Links por estado */}
             {!isGuest && (
               <Link href="/profile">
                 <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
@@ -50,7 +54,7 @@ export default function Navbar() {
               </Link>
             )}
 
-            {role === "registered" && (
+            {isRegistered && (
               <Link href="/pago">
                 <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
                   Hazte premium
@@ -82,7 +86,10 @@ export default function Navbar() {
               </>
             ) : (
               <button
-                onClick={() => setRole("guest")}
+                onClick={() => {
+                  logout();
+                  window.location.href = "/";
+                }}
                 className="px-4 py-2 rounded-md border border-[#fee600] text-[#fee600] font-semibold hover:bg-[#fee600] hover:text-black transition cursor-pointer"
               >
                 Salir
@@ -106,9 +113,11 @@ export default function Navbar() {
                 <p className="block px-3 py-2 text-[#fee600] hover:text-primary transition">Inicio</p>
               </Link>
 
-              <Link href="/clases" onClick={toggleMenu}>
-                <p className="block px-3 py-2 text-[#fee600] hover:text-primary transition">Clases</p>
-              </Link>
+              {!isGuest && (
+                <Link href="/clases" onClick={toggleMenu}>
+                  <p className="block px-3 py-2 text-[#fee600] hover:text-primary transition">Clases</p>
+                </Link>
+              )}
 
               {!isGuest && (
                 <Link href="/profile" onClick={toggleMenu}>
@@ -116,8 +125,8 @@ export default function Navbar() {
                 </Link>
               )}
 
-              {role === "registered" && (
-                <Link href="/hazte-premium" onClick={toggleMenu}>
+              {isRegistered && (
+                <Link href="/pago" onClick={toggleMenu}>
                   <p className="block px-3 py-2 text-[#fee600] hover:text-primary transition">Hazte premium</p>
                 </Link>
               )}
@@ -144,8 +153,9 @@ export default function Navbar() {
               ) : (
                 <button
                   onClick={() => {
-                    setRole("guest");
+                    logout();
                     toggleMenu();
+                    window.location.href = "/";
                   }}
                   className="w-full mt-2 px-4 py-2 rounded-md border border-[#fee600] text-[#fee600] font-semibold hover:bg-[#fee600] hover:text-black"
                 >
