@@ -1,11 +1,13 @@
 "use client";
 import Link from "next/link";
-import { useRole } from "@/context/RoleContext";
+import { useAuth } from "@/context/AuthContext";
+
 
 export default function MisTurnosPage() {
-  const { role } = useRole();
+  const { user } = useAuth();
+  const role = user?.estado;
 
-  if (role !== "premium") {
+  if (role !== "Activo") {
     return (
       <div className="p-6">
         <h1 className="text-xl font-bold mb-2">Solo para usuarios Premium</h1>
