@@ -22,7 +22,7 @@ function ActivityCard({
   duracion,
   participantes,
   intensidad,
-  image,
+  imageUrl,
 }: Props) {
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
@@ -54,7 +54,7 @@ function ActivityCard({
     >
       <div className="relative h-48 overflow-hidden">
         <img
-          src={image || "/placeholder.svg"}
+          src={imageUrl || "/placeholder.svg"}
           alt={nombre}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
         />

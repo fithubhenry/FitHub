@@ -12,7 +12,8 @@ export interface IClase {
     grupo_musculo: "Pierna" | "Brazos" | "Abdomen" | "Espalda" | "Glúteos" | "Cardio";
     sub_musculo: "biceps" | "triceps" | "cuadriceps" | "abdominal" | "gluteo" | "dorsal" | "pectoral";
     sede: string;
-    image: string;
+  image: string;
+  imageUrl?: string;
     
 }
 
