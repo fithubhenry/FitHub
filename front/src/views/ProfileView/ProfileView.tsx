@@ -25,8 +25,8 @@ export default function ProfileView() {
       <div className="mt-4 flex items-center gap-4">
         <div className="w-16 h-16 rounded-full bg-neutral-800" />
         <div>
-          <p className="text-white font-semibold">Genaro Usuario</p>
-          <p className="text-neutral-400 text-sm">genaro@correo.com</p>
+          <p className="text-white font-semibold">Ale Usuario</p>
+          <p className="text-neutral-400 text-sm">example@correo.com</p>
         </div>
 
         <span
