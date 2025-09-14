@@ -43,7 +43,7 @@ export default function ActivityDetailView() {
     <div className="max-w-5xl mx-auto p-6 bg-white rounded-xl shadow">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
-          <Image src={`/${clase.image || "placeholder.svg"}`} alt={clase.nombre} fill className="object-cover" />
+          <Image src={clase.imageUrl || "/placeholder.svg"} alt={clase.nombre} fill className="object-cover" />
         </div>
         <div className="space-y-3">
           <h2 className="text-2xl font-bold">{clase.nombre}</h2>

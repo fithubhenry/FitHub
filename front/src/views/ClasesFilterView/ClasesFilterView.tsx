@@ -73,6 +73,7 @@ export default function ClasesFilterView() {
       // Prepara filtros para backend, pero filtra sub_musculo en frontend si es array
       const data = await getClases({
         ...filters,
+        grupo_musculo: filters.grupo_musculo ? [`"${filters.grupo_musculo}"`] : undefined,
         sub_musculo: undefined // no lo mandamos al backend, filtramos local
       });
       let filtrados = data;

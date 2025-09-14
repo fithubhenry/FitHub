@@ -23,6 +23,7 @@ function ActivityCard({
   participantes,
   intensidad,
   imageUrl,
+  
 }: Props) {
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
