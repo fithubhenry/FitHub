@@ -4,7 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar/Navbar";
 import Footer from "@/components/footer/footer";
 import { Slide, ToastContainer } from "react-toastify";
-import { RoleProvider } from "@/context/RoleContext";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,7 +42,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${anton.variable} ${poppins.variable} antialiased min-h-screen grid grid-rows-[auto_1fr_auto] m-0`}
       >
-        <RoleProvider>
+        <AuthProvider>
           <Navbar />
           <main className="flex-1">{children}</main>
 
@@ -60,7 +60,7 @@ export default function RootLayout({
             theme="dark"
             transition={Slide}
           />
-        </RoleProvider>
+        </AuthProvider>
       </body>
     </html>
   );

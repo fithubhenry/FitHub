@@ -12,7 +12,8 @@ export interface IClase {
     grupo_musculo: "Pierna" | "Brazos" | "Abdomen" | "Espalda" | "Glúteos" | "Cardio";
     sub_musculo: "biceps" | "triceps" | "cuadriceps" | "abdominal" | "gluteo" | "dorsal" | "pectoral";
     sede: string;
-    image: string;
+  image: string;
+  imageUrl?: string;
     
 }
 
@@ -38,3 +39,18 @@ export interface GoogleButtonProps {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   text?: string;
 }
+
+export type User = {
+  userId: string;
+  email: string;
+  esAdmin: boolean;
+  estado: 'Activo' | 'Inactivo' | 'Suspendido' | 'Invitado';
+};
+
+export type AuthContextType = {
+  user: User | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  login: (token: string) => void;
+  logout: () => void;
+};

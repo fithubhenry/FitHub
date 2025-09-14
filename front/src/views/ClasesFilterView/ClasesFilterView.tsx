@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { preloadClases } from "@/helpers/preloadClases";
+import { getClases } from "@/services/clasesService";
 import { IClase } from "@/types";
 import ActivityCard from "@/components/Cards/ActivityCard";
 
@@ -29,7 +29,6 @@ const SELECTS: { key: keyof Filters; label: string }[] = [
   { key: "instructor", label: "Instructor" },
 ];
 
-
 export default function ClasesFilterView() {
   const [filters, setFilters] = useState<Filters>(INITIAL_FILTERS);
   const [allClases, setAllClases] = useState<IClase[]>([]);
@@ -54,49 +53,80 @@ export default function ClasesFilterView() {
   const options: OptionMap = useMemo(() => {
     return {
       tipo: uniques(allClases.map((a) => a.tipo)),
-      grupo_musculo: uniques(allClases.map((a) => a.grupo_musculo)),
+      grupo_musculo: uniques(
+        allClases.flatMap((a) => Array.isArray(a.grupo_musculo) ? a.grupo_musculo.filter(Boolean) : [a.grupo_musculo])
+      ),
       intensidad: uniques(allClases.map((a) => a.intensidad)),
       instructor: uniques(allClases.map((a) => a.instructor)),
       sub_musculo: uniques(
         (filters.grupo_musculo
-          ? allClases.filter((a) => a.grupo_musculo === filters.grupo_musculo)
+          ? allClases.filter((a) => Array.isArray(a.grupo_musculo) ? a.grupo_musculo.includes(filters.grupo_musculo) : a.grupo_musculo === filters.grupo_musculo)
           : allClases
-        ).map((a) => a.sub_musculo)
+        ).flatMap((a) => Array.isArray(a.sub_musculo) ? a.sub_musculo.filter(Boolean) : [])
       ),
     };
   }, [allClases, filters.grupo_musculo]);
 
-  const applyFilters = (data: IClase[]) =>
-    data.filter((a) =>
-      (Object.keys(filters) as (keyof Filters)[]).every(
-        (k) => !filters[k] || String((a as any)[k]) === filters[k]
-      )
-    );
-
   const buscar = async () => {
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 300));
-    const data = applyFilters(preloadClases);
-    setResultados(data);
-    if (!allClases.length) setAllClases(preloadClases);
+    try {
+      // Prepara filtros para backend, pero filtra sub_musculo en frontend si es array
+      const data = await getClases({
+        ...filters,
+        sub_musculo: undefined // no lo mandamos al backend, filtramos local
+      });
+      let filtrados = data;
+      if (filters.sub_musculo) {
+        filtrados = data.filter((clase) => {
+          const subs = Array.isArray(clase.sub_musculo) ? clase.sub_musculo : [clase.sub_musculo];
+          return subs.includes(filters.sub_musculo as typeof subs[number]);
+        });
+      }
+      setResultados(filtrados);
+      if (!allClases.length) setAllClases(data);
+    } catch {
+      setResultados([]);
+    }
     setLoading(false);
   };
 
-  const resetFilters = () => {
+  const resetFilters = async () => {
     setFilters(INITIAL_FILTERS);
-    setResultados(allClases.length ? allClases : preloadClases);
+    setLoading(true);
+    try {
+      const data = await getClases();
+      setResultados(data);
+      setAllClases(data);
+    } catch {
+      setResultados([]);
+    }
+    setLoading(false);
   };
 
   // carga inicial
   useEffect(() => {
-    setAllClases(preloadClases);
-    setResultados(preloadClases);
+    (async () => {
+      setLoading(true);
+      try {
+        const data = await getClases();
+        setAllClases(data);
+        setResultados(data);
+        // DEBUG: mostrar todos los sub_musculo y grupo_musculo en consola
+        console.log("Sub-músculos en clases:", data.map(c => c.sub_musculo));
+        console.log("Grupo muscular en clases:", data.map(c => c.grupo_musculo));
+      } catch {
+        setAllClases([]);
+        setResultados([]);
+      }
+      setLoading(false);
+    })();
   }, []);
 
   // si todos vacíos → mostrar todo
   useEffect(() => {
-    if (Object.values(filters).every((v) => !v))
-      setResultados(allClases.length ? allClases : preloadClases);
+    if (Object.values(filters).every((v) => !v)) {
+      setResultados(allClases);
+    }
   }, [filters, allClases]);
 
   return (

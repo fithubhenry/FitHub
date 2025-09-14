@@ -4,7 +4,7 @@ import { IClase } from "@/types";
 import { Clock, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRole } from "@/context/RoleContext";
+import { useAuth } from "@/context/AuthContext";
 
 type Props = IClase;
 
@@ -22,14 +22,14 @@ function ActivityCard({
   duracion,
   participantes,
   intensidad,
-  image,
+  imageUrl,
 }: Props) {
   const router = useRouter();
-  const { role } = useRole(); // "guest" | "registered" | "premium"
+  const { user, isAuthenticated } = useAuth();
 
-  const esInvitado = role === "guest";
-  const esRegistrado = role === "registered";
-  const esPremium = role === "premium";
+  const esInvitado = !isAuthenticated;
+  const esRegistrado = isAuthenticated && user?.estado === "Invitado";
+  const esPremium = isAuthenticated && user?.estado === "Activo";
 
   const textoBoton = esPremium
     ? "Reservar Clase"
@@ -54,7 +54,7 @@ function ActivityCard({
     >
       <div className="relative h-48 overflow-hidden">
         <img
-          src={image || "/placeholder.svg"}
+          src={imageUrl || "/placeholder.svg"}
           alt={nombre}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
         />
@@ -102,6 +102,5 @@ function ActivityCard({
     </Link>
   );
 }
-
 
 export default ActivityCard;

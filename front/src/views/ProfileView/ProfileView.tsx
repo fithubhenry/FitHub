@@ -1,12 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useRole } from "@/context/RoleContext";
+import { useAuth } from "@/context/AuthContext";
 
 export default function ProfileView() {
-  // Traigo el rol desde el contexto. Si no hay contexto, asumo invitado.
-  const contextoRol = useRole();
-  const rol = contextoRol?.role ?? "guest";
+  const { user, isAuthenticated } = useAuth();
 
   // Etiqueta legible según el rol
   const etiquetaPorRol: Record<"guest" | "registered" | "premium", string> = {
@@ -15,9 +13,9 @@ export default function ProfileView() {
     premium: "Premium",
   };
 
-  const esInvitado = rol === "guest";
-  const esRegistrado = rol === "registered";
-  const esPremium = rol === "premium";
+  const esInvitado = !isAuthenticated;
+  const esRegistrado = isAuthenticated && user?.estado === "Invitado";
+  const esPremium = isAuthenticated && user?.estado === "Activo";
 
   return (
     <div className="max-w-3xl mx-auto p-6">
@@ -38,7 +36,7 @@ export default function ProfileView() {
               : "bg-neutral-800 text-neutral-300"
           }`}
         >
-          {etiquetaPorRol[rol]}
+          {etiquetaPorRol[esInvitado ? "guest" : esPremium ? "premium" : "registered"]}
         </span>
       </div>
 
