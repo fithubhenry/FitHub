@@ -80,6 +80,7 @@ export default function ProfileView() {
         <div>
           <p className="text-white font-semibold">{user?.nombre}</p>
           <p className="text-neutral-400 text-sm">{user?.correo}</p>
+
         </div>
 
         <span

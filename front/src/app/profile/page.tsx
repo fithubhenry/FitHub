@@ -4,6 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import ProfileView from "@/views/ProfileView/ProfileView";
 
 export default function Page() {
+
   const { user, isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
