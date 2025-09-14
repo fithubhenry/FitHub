@@ -45,6 +45,13 @@ export type User = {
   email: string;
   esAdmin: boolean;
   estado: 'Activo' | 'Inactivo' | 'Suspendido' | 'Invitado';
+  nombre?: string;
+  apellido?: string;
+  telefono?: number | string;
+  fecha_nacimiento?: string;
+  direccion?: string;
+  ciudad?: string;
+  correo?: string;
 };
 
 export type AuthContextType = {

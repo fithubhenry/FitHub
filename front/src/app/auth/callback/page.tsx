@@ -17,8 +17,7 @@ export default function GoogleCallbackPage() {
 
     if (token) {
       localStorage.setItem("token", token);
-      router.replace("/dashboard"); // redirige al dashboard
-    } else {
+      router.replace("/profile");
       router.replace("/login");
     }
   }, [router]);

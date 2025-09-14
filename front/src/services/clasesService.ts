@@ -4,8 +4,8 @@ const APIURL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function getClases(filters?: {
   tipo?: string;
-  grupo_musculo?: string;
-  sub_musculo?: string;
+  grupo_musculo?: string | string[];
+  sub_musculo?: string | string[];
   intensidad?: string;
   instructor?: string;
 }): Promise<IClase[]> {
@@ -13,7 +13,11 @@ export async function getClases(filters?: {
   if (filters) {
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
-      if (value) params.append(key, value);
+      if (Array.isArray(value)) {
+        value.forEach((v) => params.append(key, v));
+      } else if (value) {
+        params.append(key, value);
+      }
     });
     query = `?${params.toString()}`;
   }
