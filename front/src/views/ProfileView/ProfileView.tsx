@@ -7,8 +7,7 @@ import { useState } from "react";
 import Image from "next/image";
 
 export default function ProfileView() {
-// importación ya está arriba
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, setUser } = useAuth();
   const [avatarUrl, setAvatarUrl] = useState<string>("");
   const [uploading, setUploading] = useState(false);
   const [fullUser, setFullUser] = useState<any>(null);
@@ -16,7 +15,10 @@ export default function ProfileView() {
   useEffect(() => {
     if (user?.userId) {
       getUserById(user.userId)
-        .then(setFullUser)
+        .then((data) => {
+          console.log('[DEBUG] Avatar URL recibida:', data.profileImageUrl || data.avatarUrl);
+          setFullUser(data);
+        })
         .catch(() => setFullUser(null));
     }
   }, [user?.userId]);
@@ -51,6 +53,9 @@ export default function ProfileView() {
       const data = await res.json();
       console.log("URL recibida del backend:", data.imageUrl);
       setAvatarUrl(data.imageUrl || "");
+      if (user && setUser) {
+        setUser({ ...user, avatarUrl: data.imageUrl || "" });
+      }
     } catch {
       alert("Error al subir la imagen");
     }

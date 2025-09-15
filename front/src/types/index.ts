@@ -52,6 +52,8 @@ export type User = {
   direccion?: string;
   ciudad?: string;
   correo?: string;
+  avatarUrl?: string;
+  profileImageUrl?: string;
 };
 
 export type AuthContextType = {
@@ -60,4 +62,5 @@ export type AuthContextType = {
   isAuthenticated: boolean;
   login: (token: string) => void;
   logout: () => void;
+  setUser: (user: User | null) => void;
 };
