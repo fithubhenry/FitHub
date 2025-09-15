@@ -34,6 +34,17 @@ export default function ClasesFilterView() {
   const [allClases, setAllClases] = useState<IClase[]>([]);
   const [resultados, setResultados] = useState<IClase[]>([]);
   const [loading, setLoading] = useState(false);
+  // Debug: log state changes
+  useEffect(() => {
+    console.log("[DEBUG] allClases:", allClases);
+  }, [allClases]);
+  useEffect(() => {
+    console.log("[DEBUG] filters:", filters);
+  }, [filters]);
+  useEffect(() => {
+    console.log("[DEBUG] resultados:", resultados);
+  }, [resultados]);
+  // ...existing code...
 
   const hasFilters = useMemo(
     () => Object.values(filters).some(Boolean),
@@ -66,24 +77,27 @@ export default function ClasesFilterView() {
       ),
     };
   }, [allClases, filters.grupo_musculo]);
+  // Log options for selects (después de la declaración)
+  useEffect(() => {
+    console.log("[DEBUG] options:", options);
+  }, [options]);
 
   const buscar = async () => {
     setLoading(true);
+    console.log('[DEBUG] Filtros enviados al backend:', {
+      ...filters,
+      grupo_musculo: filters.grupo_musculo ? [filters.grupo_musculo] : undefined,
+      sub_musculo: filters.sub_musculo ? [filters.sub_musculo] : undefined,
+    });
     try {
-      // Prepara filtros para backend, pero filtra sub_musculo en frontend si es array
-      const data = await getClases({
+      // Prepara filtros para backend, ahora sub_musculo también se envía como array
+      const filtrosBackend = {
         ...filters,
-        grupo_musculo: filters.grupo_musculo ? [`"${filters.grupo_musculo}"`] : undefined,
-        sub_musculo: undefined // no lo mandamos al backend, filtramos local
-      });
-      let filtrados = data;
-      if (filters.sub_musculo) {
-        filtrados = data.filter((clase) => {
-          const subs = Array.isArray(clase.sub_musculo) ? clase.sub_musculo : [clase.sub_musculo];
-          return subs.includes(filters.sub_musculo as typeof subs[number]);
-        });
-      }
-      setResultados(filtrados);
+        grupo_musculo: filters.grupo_musculo || undefined,
+        sub_musculo: filters.sub_musculo || undefined,
+      };
+      const data = await getClases(filtrosBackend);
+      setResultados(data);
       if (!allClases.length) setAllClases(data);
     } catch {
       setResultados([]);
@@ -109,12 +123,12 @@ export default function ClasesFilterView() {
     (async () => {
       setLoading(true);
       try {
-        const data = await getClases();
-        setAllClases(data);
-        setResultados(data);
-        // DEBUG: mostrar todos los sub_musculo y grupo_musculo en consola
-        console.log("Sub-músculos en clases:", data.map(c => c.sub_musculo));
-        console.log("Grupo muscular en clases:", data.map(c => c.grupo_musculo));
+  const data = await getClases();
+  setAllClases(data);
+  setResultados(data);
+  // DEBUG: mostrar todos los sub_musculo y grupo_musculo en consola
+  console.log("[DEBUG] Sub-músculos en clases:", data.map(c => c.sub_musculo));
+  console.log("[DEBUG] Grupo muscular en clases:", data.map(c => c.grupo_musculo));
       } catch {
         setAllClases([]);
         setResultados([]);
