@@ -46,15 +46,15 @@ const RegisterView = () => {
 
         <Formik<RegisterFormValues>
           initialValues={{
-            nombre: "Xavier",
-            apellido: "Manzoco",
+            nombre: "Juan",
+            apellido: "Doe",
             fecha_nacimiento: "",
-            email: "xavim15@gmail.com",
+            email: "mail@gmail.com",
             password: "123456",
             confirmPassword: "T!aA123",
-            ciudad: "Pergamino",
-            direccion: "11 de septiembre 234",
-            telefono: "2477681549"
+            ciudad: "Buenos Aires",
+            direccion: "Direccion Falsa 123",
+            telefono: "1234567890"
           }}
           validationSchema={validateFormRegister}
           onSubmit={async (values, { setSubmitting }) => {
