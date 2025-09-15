@@ -53,35 +53,45 @@ export default function ClasesFilterView() {
 
   const options: OptionMap = useMemo(() => {
     return {
-      tipo: uniques(allClases.map((a) => a.tipo)),
-      grupo_musculo: uniques(
+      tipo: [...new Set(allClases.map((a) => a.tipo).filter(Boolean))],
+      grupo_musculo: [...new Set(
         allClases.flatMap((a) => Array.isArray(a.grupo_musculo) ? a.grupo_musculo.filter(Boolean) : [a.grupo_musculo])
-      ),
-      intensidad: uniques(allClases.map((a) => a.intensidad)),
-      instructor: uniques(allClases.map((a) => a.instructor)),
-      sub_musculo: uniques(
+      )],
+      intensidad: [...new Set(allClases.map((a) => a.intensidad).filter(Boolean))],
+      instructor: [...new Set(allClases.map((a) => a.instructor).filter(Boolean))],
+      sub_musculo: [...new Set(
         (filters.grupo_musculo
           ? allClases.filter((a) => Array.isArray(a.grupo_musculo) ? a.grupo_musculo.includes(filters.grupo_musculo) : a.grupo_musculo === filters.grupo_musculo)
           : allClases
         ).flatMap((a) => Array.isArray(a.sub_musculo) ? a.sub_musculo.filter(Boolean) : [])
-      ),
+      )],
     };
   }, [allClases, filters.grupo_musculo]);
 
   const buscar = async () => {
     setLoading(true);
-    console.log('[DEBUG] Filtros enviados al backend:', {
+    // Log de los filtros enviados
+    const filtrosBackend = {
       ...filters,
-      grupo_musculo: filters.grupo_musculo || undefined,
-      sub_musculo: filters.sub_musculo || undefined,
+      grupo_musculo: filters.grupo_musculo ? [filters.grupo_musculo] : undefined,
+      sub_musculo: filters.sub_musculo ? [filters.sub_musculo] : undefined,
+    };
+    console.log('[DEBUG] Filtros enviados al backend:', filtrosBackend);
+
+    // Construye la query igual que en getClases
+    const params = new URLSearchParams();
+    Object.entries(filtrosBackend).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((v) => params.append(key, v));
+      } else if (value) {
+        params.append(key, value);
+      }
     });
+    const query = params.toString();
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/clases${query ? `?${query}` : ''}`;
+    console.log('[DEBUG] URL de la petición:', apiUrl);
+
     try {
-      // Prepara filtros para backend, ahora sub_musculo también se envía como array
-      const filtrosBackend = {
-        ...filters,
-        grupo_musculo: filters.grupo_musculo || undefined,
-        sub_musculo: filters.sub_musculo || undefined,
-      };
       const data = await getClases(filtrosBackend);
       console.log('[DEBUG] Respuesta filtrada:', data);
       setResultados(data);
@@ -155,7 +165,7 @@ export default function ClasesFilterView() {
 
       <div className="flex items-center gap-3">
         <button
-          className="px-4 py-2 bg-black text-white rounded cursor-pointer"
+          className="px-4 py-2 rounded-md border bg-black border-[#fee600] text-[#fee600] font-semibold hover:bg-[#fee600] hover:text-black transition cursor-pointer"
           onClick={buscar}
           disabled={loading}
         >
@@ -165,8 +175,8 @@ export default function ClasesFilterView() {
         {hasFilters && (
           <button
             onClick={resetFilters}
-            className="px-4 py-2 rounded border border-neutral-300 hover:bg-neutral-50 cursor-pointer"
-          >
+            className="px-4 py-2 rounded-md border bg-black border-[#fee600] text-[#fee600] font-semibold hover:bg-[#fee600] hover:text-black transition cursor-pointer"
+              >
             Reiniciar filtros
           </button>
         )}

@@ -1,7 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { getClaseById } from "@/services/clasesService";
+
 import { IClase } from "@/types";
 import Image from "next/image";
 import { Clock, Users } from "lucide-react";
@@ -20,7 +18,7 @@ export default function ActivityDetailView({ clase }: { clase: IClase }) {
   const canReserve = isAuthenticated && user?.estado === "Activo";
   const disabled = !canReserve;
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white rounded-xl shadow">
+    <div className="mt-10 max-w-5xl mx-auto p-6 bg-white rounded-xl shadow">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
           <Image src={clase.imageUrl || "/placeholder.svg"} alt={clase.nombre} fill className="object-cover" />
