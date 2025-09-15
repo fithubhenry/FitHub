@@ -1,7 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { getClaseById } from "@/services/clasesService";
+
 import { IClase } from "@/types";
 import Image from "next/image";
 import { Clock, Users } from "lucide-react";
@@ -14,33 +12,13 @@ const intensityStyles: Record<IClase["intensidad"], string> = {
   baja: "bg-green-100 text-black",
 };
 
-export default function ActivityDetailView() {
-  const { id } = useParams();
-  const [clase, setClase] = useState<IClase | null>(null);
-  const [loading, setLoading] = useState(true);
+export default function ActivityDetailView({ clase }: { clase: IClase }) {
   const { user, isAuthenticated } = useAuth();
-
-  useEffect(() => {
-    async function fetchClase() {
-      try {
-        const data = await getClaseById(id as string);
-        setClase(data);
-      } catch {
-        setClase(null);
-      }
-      setLoading(false);
-    }
-    fetchClase();
-  }, [id]);
-
-  if (loading) return <div className="p-6">Cargando...</div>;
   if (!clase) return <div className="p-6">Clase no encontrada</div>;
-
   const canReserve = isAuthenticated && user?.estado === "Activo";
   const disabled = !canReserve;
-
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white rounded-xl shadow">
+    <div className="mt-10 max-w-5xl mx-auto p-6 bg-white rounded-xl shadow">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
           <Image src={clase.imageUrl || "/placeholder.svg"} alt={clase.nombre} fill className="object-cover" />

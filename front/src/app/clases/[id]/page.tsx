@@ -25,5 +25,5 @@ export default function ClaseDetallePage() {
   if (loading) return <p className="p-6">Cargando...</p>;
   if (!clase) return <p className="p-6">Clase no encontrada</p>;
 
-  return <ActivityDetailView />
+  return <ActivityDetailView clase={clase} />
 };
