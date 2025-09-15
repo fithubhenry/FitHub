@@ -1,21 +1,22 @@
 "use client";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
+import MpButton from "@/components/MpButton/MpButton";
 
 export default function PagoPage() {
-  const { user, isAuthenticated } = useAuth();
-  const router = useRouter();
-
+  const { isAuthenticated } = useAuth();
+  
   return (
     <div className="max-w-md mx-auto p-6">
       <h1 className="text-2xl font-bold mb-2">Hazte premium</h1>
       <p className="mb-4 text-gray-600">Accedé a reservas y beneficios.</p>
-      <button
-        onClick={() => { router.push("/clases"); }}
-        className="w-full bg-yellow-400 hover:bg-black hover:text-yellow-400 text-black font-semibold rounded px-4 py-2"
-      >
-        Pagar ahora (demo)
-      </button>
+      
+      {isAuthenticated ? (
+        <MpButton />
+      ) : (
+        <p className="text-red-500 font-semibold text-center">
+          Necesitas iniciar sesión para pagar.
+        </p>
+      )}
     </div>
   );
 }
