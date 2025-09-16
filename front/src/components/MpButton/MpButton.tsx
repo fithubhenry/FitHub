@@ -37,8 +37,8 @@ export default function MpButton() {
   return (
     <button
       onClick={createPreference}
-      disabled={loading || !user?.userId}   
-      className="bg-yellow-400 px-4 py-2 rounded text-black font-semibold hover:bg-black hover:text-yellow-400"
+      disabled={loading || !user?.userId}
+      className="w-full px-2 py-2 rounded-md border bg-[#fee600] border-[#fee600] text-black font-semibold hover:bg-black hover:text-[#fee600] transition cursor-pointer"
     >
       {loading ? "Redirigiendo..." : "Pagar ahora"}
     </button>
