@@ -5,7 +5,7 @@ import ProfileView from "@/views/ProfileView/ProfileView";
 
 export default function Page() {
 
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
     return (

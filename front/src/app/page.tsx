@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import { getClases } from "@/services/clasesService";
 import ActivityCard from "@/components/Cards/ActivityCard";
 import { IClase } from "@/types";
+import Link from "next/link";
 
 export default function Home() {
   const [clases, setClases] = useState<IClase[]>([]);
@@ -21,6 +23,12 @@ export default function Home() {
     })();
   }, []);
 
+  const [showStartButton, setShowStartButton] = useState(false);
+
+  useEffect(() => {
+    setShowStartButton(!Cookies.get("token"));
+  }, []);
+
   return (
     <main>
       <section className="flex flex-col items-center justify-center min-h-[60vh] py-12 px-4 bg-[#fee600]">
@@ -30,9 +38,15 @@ export default function Home() {
         <p className="text-lg md:text-xl text-gray-700 mb-8 text-center max-w-xl">
           Tu plataforma para alcanzar tus objetivos fitness. Descubre planes, rutinas y mucho más.
         </p>
-        <button className="px-8 py-4 bg-gray-900 text-white rounded-lg text-lg font-semibold">
-          Empezar ahora
-        </button>
+        {showStartButton && (
+          <Link href="/login">
+          <button
+            className="px-8 py-4 bg-gray-900 cursor-pointer text-white rounded-lg text-lg font-semibold"
+          >
+            Empezar ahora
+          </button>
+          </Link>
+        )}
       </section>
 
       <section>

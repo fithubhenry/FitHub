@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { getClases } from "@/services/clasesService";
 import { IClase } from "@/types";
 import ActivityCard from "@/components/Cards/ActivityCard";
+import Loader from "@/components/Loader/Loader";
 
 type Filters = {
   tipo: string;
@@ -182,7 +183,7 @@ export default function ClasesFilterView() {
         )}
       </div>
 
-      {loading && <p>Cargando...</p>}
+  {loading && <Loader text="Cargando clases..." />}
       {!loading && resultados.length === 0 && <p>No hay resultados</p>}
 
       <div className="grid mb-16 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 max-w-full mx-auto">

@@ -1,5 +1,6 @@
 import { ILoginUser, IRegisterUser } from "@/types";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 const APIURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -58,8 +59,8 @@ export async function login(userData: ILoginUser) {
     const parsedResponse = await response.json();
 
     if (parsedResponse.access_token) {
-      // Guardar token en localStorage
-      localStorage.setItem("token", parsedResponse.access_token);
+      // Guardar token en cookies
+      Cookies.set("token", parsedResponse.access_token, { expires: 7 });
 
       toast.success("Usuario logueado correctamente");
       // Devolvemos la respuesta completa con el status

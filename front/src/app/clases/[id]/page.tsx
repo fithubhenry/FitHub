@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getClaseById } from "@/services/clasesService";
 import ActivityDetailView from "@/views/ActivityDetailView/ActivityDetailView";
 import { IClase } from "@/types";
+import Loader from "@/components/Loader/Loader"; // Ensure Loader is imported to avoid reference error
 
 export default function ClaseDetallePage() {
   const { id } = useParams<{ id: string }>();
@@ -22,7 +23,7 @@ export default function ClaseDetallePage() {
     })();
   }, [id]);
 
-  if (loading) return <p className="p-6">Cargando...</p>;
+    if (loading) return <Loader text="Cargando clase..." />;
   if (!clase) return <p className="p-6">Clase no encontrada</p>;
 
   return <ActivityDetailView clase={clase} />
