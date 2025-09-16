@@ -12,6 +12,7 @@ export default function ProfileView() {
   const [uploading, setUploading] = useState(false);
   const [fullUser, setFullUser] = useState<any>(null);
 
+
   useEffect(() => {
     if (user?.userId) {
       getUserById(user.userId)
@@ -22,6 +23,13 @@ export default function ProfileView() {
         .catch(() => setFullUser(null));
     }
   }, [user?.userId]);
+
+  // Sincroniza avatarUrl local con el global
+  useEffect(() => {
+    if (user?.profileImageUrl) {
+      setAvatarUrl(user.profileImageUrl);
+    }
+  }, [user?.profileImageUrl]);
 
 
   // Etiqueta legible según el rol
@@ -35,6 +43,7 @@ export default function ProfileView() {
   const esRegistrado = isAuthenticated && user?.estado === "Invitado";
   const esPremium = isAuthenticated && user?.estado === "Activo";
 
+
   // Subida al backend
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -44,7 +53,7 @@ export default function ProfileView() {
     formData.append("file", file);
     try {
       const token = localStorage.getItem("token");
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/profile-image/${user.userId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/profile-image/${user.userId}`, {
         method: "PATCH",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: formData,
@@ -62,6 +71,56 @@ export default function ProfileView() {
     setUploading(false);
   }
 
+  // Guardar cambios de datos
+  async function handleSave(e: React.FormEvent) {
+    e.preventDefault();
+    if (!user?.userId) return;
+    const token = localStorage.getItem("token");
+    const password = (document.getElementById("password") as HTMLInputElement)?.value;
+    const confirmPassword = (document.getElementById("confirmPassword") as HTMLInputElement)?.value;
+    if (password && password !== confirmPassword) {
+      alert("Las contraseñas no coinciden");
+      return;
+    }
+    const telefonoValue = (document.getElementById("telefono") as HTMLInputElement)?.value;
+    const nombreValue = (document.getElementById("nombre") as HTMLInputElement)?.value;
+    const payload: any = {
+      email: (document.getElementById("email") as HTMLInputElement)?.value,
+      nombre: nombreValue,
+      apellido: (document.getElementById("apellido") as HTMLInputElement)?.value,
+      fecha_nacimiento: (document.getElementById("fecha_nacimiento") as HTMLInputElement)?.value,
+      direccion: (document.getElementById("direccion") as HTMLInputElement)?.value,
+      ciudad: (document.getElementById("ciudad") as HTMLInputElement)?.value,
+      ...(password ? { password } : {}),
+    };
+    // Convertir telefono a número si existe y es válido
+    if (telefonoValue && !isNaN(Number(telefonoValue))) {
+      payload.telefono = Number(telefonoValue);
+    }
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${user.userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.error('[ERROR PATCH]', data);
+        alert(data.message || "Error al actualizar datos");
+        return;
+      }
+      alert("Datos actualizados correctamente");
+      setFullUser(data);
+      if (setUser) setUser({ ...user, ...data });
+    } catch (err) {
+      alert("Error al actualizar datos");
+      console.error('[ERROR PATCH]', err);
+    }
+  }
+
   return (
    <div className="min-h-screen bg-black pt-20 px-6">
   <div className="max-w-3xl mx-auto bg-black  border-[#fee600] rounded-2xl border-2 p-6 shadow-[6px_8px_24px_0px_rgba(253,230,0,0.4)]">
@@ -69,14 +128,17 @@ export default function ProfileView() {
 
     {/* Encabezado con avatar, datos y etiqueta de rol */}
     <div className="mt-6 flex items-center gap-4">
-      <div className="w-16 h-16 rounded-full bg-slate-700 border border-slate-600 overflow-hidden flex items-center justify-center">
+      <div
+        className="w-16 h-16 rounded-full bg-slate-700 border border-slate-600 overflow-hidden flex items-center justify-center cursor-pointer group"
+        onClick={() => !esInvitado && document.getElementById('avatarInput')?.click()}
+      >
         {avatarUrl ? (
           <Image
             src={avatarUrl}
             alt="avatar"
             width={64}
             height={64}
-            className="rounded-full object-cover"
+            className="rounded-full object-cover group-hover:opacity-80 transition-opacity"
           />
         ) : (
           <span className="text-gray-400 text-xs">Sin foto</span>
@@ -100,17 +162,16 @@ export default function ProfileView() {
 
     {/* Input para subir imagen */}
     {!esInvitado && (
-      <div className="mt-4">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          disabled={uploading}
-          className="text-sm text-gray-300"
-        />
-        {uploading && <span className="ml-2 text-xs text-yellow-300">Subiendo...</span>}
-      </div>
+      <input
+        id="avatarInput"
+        type="file"
+        accept="image/*"
+        onChange={handleImageUpload}
+        disabled={uploading}
+        style={{ display: 'none' }}
+      />
     )}
+    {uploading && <span className="ml-2 text-xs text-yellow-300">Subiendo...</span>}
 
     {/* Aviso para invitados */}
     {esInvitado && (
@@ -132,39 +193,43 @@ export default function ProfileView() {
     <div className="mt-8 space-y-4">
       <h2 className="text-[#fee600] font-semibold">Datos:</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <input className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Email" defaultValue={fullUser?.email || ""} disabled={esInvitado} />
-        <input className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Nombre" defaultValue={fullUser?.nombre || ""} disabled={esInvitado} />
-        <input className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Apellido" defaultValue={fullUser?.apellido || ""} disabled={esInvitado} />
-        <input className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Teléfono" defaultValue={fullUser?.telefono || ""} disabled={esInvitado} />
-        <input className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Fecha de nacimiento" defaultValue={fullUser?.fecha_nacimiento || ""} disabled={esInvitado} />
-        <input className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Dirección" defaultValue={fullUser?.direccion || ""} disabled={esInvitado} />
-        <input className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Ciudad" defaultValue={fullUser?.ciudad || ""} disabled={esInvitado} />
-      </div>
+      <form onSubmit={handleSave}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          
+          <input id="nombre" className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Nombre" defaultValue={fullUser?.nombre || ""} disabled={esInvitado} />
+          <input id="apellido" className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Apellido" defaultValue={fullUser?.apellido || ""} disabled={esInvitado} />
+          <input id="telefono" className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Teléfono" defaultValue={fullUser?.telefono || ""} disabled={esInvitado} />
+          <input id="direccion" className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Dirección" defaultValue={fullUser?.direccion || ""} disabled={esInvitado} />
+          <input id="ciudad" className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Ciudad" defaultValue={fullUser?.ciudad || ""} disabled={esInvitado} />
+          <input id="password" type="password" className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Nueva contraseña" disabled={esInvitado} />
+          
+        </div>
 
-      <div className="flex gap-3">
-        <button
-          className={`mt-3 px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200
-            ${
-              esInvitado
-                ? "bg-gray-600 cursor-not-allowed text-gray-300 "
-                : "bg-[#fee600] text-black hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#fee600] shadow-lg hover:shadow-xl"
-            }`}
-          disabled={esInvitado}
-        >
-          Guardar cambios
-        </button>
-
-        {/* Sugerencia de upgrade para usuarios registrados */}
-        {esRegistrado && (
-          <Link
-            href="/pago"
-            className="mt-3 px-4 py-2 rounded-lg border border-[#fee600] text-[#fee600] font-semibold hover:bg-[#fee600] hover:text-black transition-colors duration-200"
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            className={`mt-3 px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200
+              ${
+                esInvitado
+                  ? "bg-gray-600 cursor-not-allowed text-gray-300 "
+                  : "bg-[#fee600] text-black hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#fee600] shadow-lg hover:shadow-xl"
+              }`}
+            disabled={esInvitado}
           >
-            Hazte premium
-          </Link>
-        )}
-      </div>
+            Guardar cambios
+          </button>
+
+          {/* Sugerencia de upgrade para usuarios registrados */}
+          {esRegistrado && (
+            <Link
+              href="/pago"
+              className="mt-3 px-4 py-2 rounded-lg border border-[#fee600] text-[#fee600] font-semibold hover:bg-[#fee600] hover:text-black transition-colors duration-200"
+            >
+              Hazte premium
+            </Link>
+          )}
+        </div>
+      </form>
     </div>
   </div>
 </div>

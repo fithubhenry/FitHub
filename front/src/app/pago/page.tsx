@@ -42,7 +42,7 @@ export default function PagoPage() {
         </div>
         <button
           onClick={() => { router.push("/clases"); }}
-          className="w-full bg-[#fee600] hover:bg-black hover:text-[#fee600] text-black font-semibold rounded px-4 py-3 text-lg transition-colors duration-200"
+          className="mt-3 px-4 py-2 rounded-lg bg-[#fee600] text-black hover:border-[#fee600] font-semibold hover:bg-black hover:text-[#fee600] transition-colors duration-200"
         >
           Pagar ahora
         </button>
