@@ -44,7 +44,7 @@ export default function PagoPage() {
           </ul>
         </div>
 
-        <div className="mb-8 flex flex-col items-center">
+        <div className="mb-4 flex flex-col items-center">
           <div className="bg-gray-100 rounded-lg p-4 w-full flex flex-col items-center">
             <span className="text-2xl font-bold text-gray-900 mb-1">$29.999</span>
             <span className="text-gray-500 mb-2">por mes</span>
