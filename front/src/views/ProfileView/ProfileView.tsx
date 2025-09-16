@@ -7,19 +7,29 @@ import { useState } from "react";
 import Image from "next/image";
 
 export default function ProfileView() {
-// importación ya está arriba
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, setUser } = useAuth();
   const [avatarUrl, setAvatarUrl] = useState<string>("");
   const [uploading, setUploading] = useState(false);
   const [fullUser, setFullUser] = useState<any>(null);
 
+
   useEffect(() => {
     if (user?.userId) {
       getUserById(user.userId)
-        .then(setFullUser)
+        .then((data) => {
+          console.log('[DEBUG] Avatar URL recibida:', data.profileImageUrl || data.avatarUrl);
+          setFullUser(data);
+        })
         .catch(() => setFullUser(null));
     }
   }, [user?.userId]);
+
+  // Sincroniza avatarUrl local con el global
+  useEffect(() => {
+    if (user?.profileImageUrl) {
+      setAvatarUrl(user.profileImageUrl);
+    }
+  }, [user?.profileImageUrl]);
 
 
   // Etiqueta legible según el rol
@@ -33,6 +43,7 @@ export default function ProfileView() {
   const esRegistrado = isAuthenticated && user?.estado === "Invitado";
   const esPremium = isAuthenticated && user?.estado === "Activo";
 
+
   // Subida al backend
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -42,7 +53,7 @@ export default function ProfileView() {
     formData.append("file", file);
     try {
       const token = localStorage.getItem("token");
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/profile-image/${user.userId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/profile-image/${user.userId}`, {
         method: "PATCH",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: formData,
@@ -51,94 +62,158 @@ export default function ProfileView() {
       const data = await res.json();
       console.log("URL recibida del backend:", data.imageUrl);
       setAvatarUrl(data.imageUrl || "");
+      if (user && setUser) {
+        setUser({ ...user, avatarUrl: data.imageUrl || "" });
+      }
     } catch {
       alert("Error al subir la imagen");
     }
     setUploading(false);
   }
 
+  // Guardar cambios de datos
+  async function handleSave(e: React.FormEvent) {
+    e.preventDefault();
+    if (!user?.userId) return;
+    const token = localStorage.getItem("token");
+    const password = (document.getElementById("password") as HTMLInputElement)?.value;
+    const confirmPassword = (document.getElementById("confirmPassword") as HTMLInputElement)?.value;
+    if (password && password !== confirmPassword) {
+      alert("Las contraseñas no coinciden");
+      return;
+    }
+    const telefonoValue = (document.getElementById("telefono") as HTMLInputElement)?.value;
+    const nombreValue = (document.getElementById("nombre") as HTMLInputElement)?.value;
+    const payload: any = {
+      email: (document.getElementById("email") as HTMLInputElement)?.value,
+      nombre: nombreValue,
+      apellido: (document.getElementById("apellido") as HTMLInputElement)?.value,
+      fecha_nacimiento: (document.getElementById("fecha_nacimiento") as HTMLInputElement)?.value,
+      direccion: (document.getElementById("direccion") as HTMLInputElement)?.value,
+      ciudad: (document.getElementById("ciudad") as HTMLInputElement)?.value,
+      ...(password ? { password } : {}),
+    };
+    // Convertir telefono a número si existe y es válido
+    if (telefonoValue && !isNaN(Number(telefonoValue))) {
+      payload.telefono = Number(telefonoValue);
+    }
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${user.userId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.error('[ERROR PATCH]', data);
+        alert(data.message || "Error al actualizar datos");
+        return;
+      }
+      alert("Datos actualizados correctamente");
+      setFullUser(data);
+      if (setUser) setUser({ ...user, ...data });
+    } catch (err) {
+      alert("Error al actualizar datos");
+      console.error('[ERROR PATCH]', err);
+    }
+  }
+
   return (
-    <div className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-bold text-white">Mi perfil</h1>
+   <div className="min-h-screen bg-black pt-20 px-6">
+  <div className="max-w-3xl mx-auto bg-black  border-[#fee600] rounded-2xl border-2 p-6 shadow-[6px_8px_24px_0px_rgba(253,230,0,0.4)]">
+    <h1 className="text-center text-2xl font-anton text-[#fee600]">MI PERFIL</h1>
 
-      {/* Encabezado con avatar, datos y etiqueta de rol */}
-      <div className="mt-4 flex items-center gap-4">
-        <div className="w-16 h-16 rounded-full bg-neutral-800 overflow-hidden flex items-center justify-center">
-          {avatarUrl ? (
-            <Image
-              src={avatarUrl}
-              alt="avatar"
-              width={64}
-              height={64}
-              className="rounded-full object-cover"
-              style={{ objectFit: "cover", objectPosition: "center" }}
-            />
-          ) : (
-            <span className="text-neutral-400 text-xs">Sin foto</span>
-          )}
-        </div>
-        <div>
-          <p className="text-white font-semibold">{user?.nombre}</p>
-          <p className="text-neutral-400 text-sm">{user?.correo}</p>
-
-        </div>
-
-        <span
-          className={`ml-auto text-xs px-2 py-1 rounded-full ${
-            esPremium
-              ? "bg-emerald-500/20 text-emerald-300"
-              : "bg-neutral-800 text-neutral-300"
-          }`}
-        >
-          {etiquetaPorRol[esInvitado ? "guest" : esPremium ? "premium" : "registered"]}
-        </span>
+    {/* Encabezado con avatar, datos y etiqueta de rol */}
+    <div className="mt-6 flex items-center gap-4">
+      <div
+        className="w-16 h-16 rounded-full bg-slate-700 border border-slate-600 overflow-hidden flex items-center justify-center cursor-pointer group"
+        onClick={() => !esInvitado && document.getElementById('avatarInput')?.click()}
+      >
+        {avatarUrl ? (
+          <Image
+            src={avatarUrl}
+            alt="avatar"
+            width={64}
+            height={64}
+            className="rounded-full object-cover group-hover:opacity-80 transition-opacity"
+          />
+        ) : (
+          <span className="text-gray-400 text-xs">Sin foto</span>
+        )}
+      </div>
+      <div>
+        <p className="text-white font-semibold">{user?.nombre}</p>
+        <p className="text-gray-300 text-sm">{user?.correo}</p>
       </div>
 
-      {/* Input para subir imagen */}
-      {!esInvitado && (
-        <div className="mt-2">
-          <input type="file" accept="image/*" onChange={handleImageUpload} disabled={uploading} />
-          {uploading && <span className="ml-2 text-xs text-yellow-300">Subiendo...</span>}
-        </div>
-      )}
+      <span
+        className={`ml-auto text-xs px-2 py-1 rounded-full ${
+          esPremium
+            ? "bg-emerald-500/20 text-emerald-300"
+            : "bg-slate-700 text-gray-300 border border-slate-600"
+        }`}
+      >
+        {etiquetaPorRol[esInvitado ? "guest" : esPremium ? "premium" : "registered"]}
+      </span>
+    </div>
 
-      {/* Aviso para invitados */}
-      {esInvitado && (
-        <div className="mt-4 p-3 rounded-md bg-yellow-50 text-black">
-          <p>
-            Estás navegando como <strong>Invitado</strong>. Para editar tus
-            datos, iniciá sesión.
-          </p>
-          <Link
-            href="/login"
-            className="inline-block mt-2 rounded bg-[#fee600] px-4 py-2 font-semibold text-black"
-          >
-            Iniciar sesión
-          </Link>
-        </div>
-      )}
+    {/* Input para subir imagen */}
+    {!esInvitado && (
+      <input
+        id="avatarInput"
+        type="file"
+        accept="image/*"
+        onChange={handleImageUpload}
+        disabled={uploading}
+        style={{ display: 'none' }}
+      />
+    )}
+    {uploading && <span className="ml-2 text-xs text-yellow-300">Subiendo...</span>}
 
-      {/* Formulario de datos */}
-      <div className="mt-6 space-y-2">
-        <h2 className="text-white font-semibold">Datos</h2>
+    {/* Aviso para invitados */}
+    {esInvitado && (
+      <div className="mt-6 p-4 rounded-md bg-yellow-50 text-black border border-[#fee600]">
+        <p>
+          Estás navegando como <strong>Invitado</strong>. Para editar tus
+          datos, iniciá sesión.
+        </p>
+        <Link
+          href="/login"
+          className="inline-block mt-3 rounded-lg bg-[#fee600] px-4 py-2 font-semibold text-black hover:bg-yellow-400 transition-colors duration-200"
+        >
+          Iniciar sesión
+        </Link>
+      </div>
+    )}
 
+    {/* Formulario de datos */}
+    <div className="mt-8 space-y-4">
+      <h2 className="text-[#fee600] font-semibold">Datos:</h2>
+
+      <form onSubmit={handleSave}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <input className="bg-neutral-900 text-white rounded p-2" placeholder="Email" defaultValue={fullUser?.email || ""} disabled={esInvitado} />
-          <input className="bg-neutral-900 text-white rounded p-2" placeholder="Nombre" defaultValue={fullUser?.nombre || ""} disabled={esInvitado} />
-          <input className="bg-neutral-900 text-white rounded p-2" placeholder="Apellido" defaultValue={fullUser?.apellido || ""} disabled={esInvitado} />
-          <input className="bg-neutral-900 text-white rounded p-2" placeholder="Teléfono" defaultValue={fullUser?.telefono || ""} disabled={esInvitado} />
-          <input className="bg-neutral-900 text-white rounded p-2" placeholder="Fecha de nacimiento" defaultValue={fullUser?.fecha_nacimiento || ""} disabled={esInvitado} />
-          <input className="bg-neutral-900 text-white rounded p-2" placeholder="Dirección" defaultValue={fullUser?.direccion || ""} disabled={esInvitado} />
-          <input className="bg-neutral-900 text-white rounded p-2" placeholder="Ciudad" defaultValue={fullUser?.ciudad || ""} disabled={esInvitado} />
+          
+          <input id="nombre" className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Nombre" defaultValue={fullUser?.nombre || ""} disabled={esInvitado} />
+          <input id="apellido" className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Apellido" defaultValue={fullUser?.apellido || ""} disabled={esInvitado} />
+          <input id="telefono" className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Teléfono" defaultValue={fullUser?.telefono || ""} disabled={esInvitado} />
+          <input id="direccion" className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Dirección" defaultValue={fullUser?.direccion || ""} disabled={esInvitado} />
+          <input id="ciudad" className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Ciudad" defaultValue={fullUser?.ciudad || ""} disabled={esInvitado} />
+          <input id="password" type="password" className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600]" placeholder="Nueva contraseña" disabled={esInvitado} />
+          
         </div>
 
         <div className="flex gap-3">
           <button
-            className={`mt-3 px-4 py-2 rounded font-semibold ${
-              esInvitado
-                ? "bg-neutral-300 text-neutral-600 cursor-not-allowed"
-                : "bg-[#fee600] text-black"
-            }`}
+            type="submit"
+            className={`mt-3 px-4 py-2 rounded-lg font-semibold text-sm transition-all duration-200
+              ${
+                esInvitado
+                  ? "bg-gray-600 cursor-not-allowed text-gray-300 "
+                  : "bg-[#fee600] text-black hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#fee600] shadow-lg hover:shadow-xl"
+              }`}
             disabled={esInvitado}
           >
             Guardar cambios
@@ -148,13 +223,16 @@ export default function ProfileView() {
           {esRegistrado && (
             <Link
               href="/pago"
-              className="mt-3 px-4 py-2 rounded border border-[#fee600] text-[#fee600] font-semibold hover:bg-[#fee600] hover:text-black"
+              className="mt-3 px-4 py-2 rounded-lg border border-[#fee600] text-[#fee600] font-semibold hover:bg-[#fee600] hover:text-black transition-colors duration-200"
             >
               Hazte premium
             </Link>
           )}
         </div>
-      </div>
+      </form>
     </div>
+  </div>
+</div>
+
   );
 }

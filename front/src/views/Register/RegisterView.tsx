@@ -59,7 +59,7 @@ const RegisterView = () => {
           validationSchema={validateFormRegister}
           onSubmit={async (values, { setSubmitting }) => {
             try {
-              // Convertimos los valores del formulario al tipo IRegisterUser
+              
               const payload: IRegisterUser = {
                 nombre: values.nombre,
                 apellido: values.apellido,
@@ -72,12 +72,12 @@ const RegisterView = () => {
                 ciudad: values.ciudad
               };
               
-              // Llamamos al servicio de registro
+              
               const response = await register(payload);
               
-              // Si el registro fue exitoso (200 o 201), redirigimos al login
+              
               if (response && (response.status === 200 || response.status === 201)) {
-                // Redirigir al login después de un pequeño delay para mostrar el mensaje
+                
                 setTimeout(() => {
                   router.push('/login');
                 }, 1000);

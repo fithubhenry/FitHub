@@ -47,11 +47,22 @@ export default function Navbar() {
 
             {/* Links por estado */}
             {!isGuest && (
-              <Link href="/profile">
-                <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
-                  Mi perfil
-                </p>
-              </Link>
+              <>
+                <Link href="/profile">
+                  <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
+                    Mi perfil
+                  </p>
+                </Link>
+                {user?.profileImageUrl && (
+                  <Link href="/profile">
+                    <img
+                      src={user.profileImageUrl}
+                      alt="Perfil"
+                      className="ml-2 w-8 h-8 rounded-full border-2 border-[#fee600] object-cover shadow"
+                    />
+                  </Link>
+                )}
+              </>
             )}
 
             {isRegistered && (
