@@ -1,26 +1,25 @@
-// app/auth/callback/page.tsx
 "use client";
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import Cookies from "js-cookie";
+import Loader from "@/components/Loader/Loader";
 
-// Esto evita el prerender y obliga a render en cliente
 export const dynamic = "force-dynamic";
 
 export default function GoogleCallbackPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // Captura el token desde la query string
+
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
 
     if (token) {
-      localStorage.setItem("token", token);
       router.replace("/profile");
-      router.replace("/login");
+      Cookies.set("token", token, { expires: 7 });
     }
   }, [router]);
 
-  return <p>Procesando login con Google...</p>;
+  return <Loader text="Procesando login con Google..." />;
 }

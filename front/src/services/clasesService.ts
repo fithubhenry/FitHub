@@ -1,4 +1,5 @@
 import { IClase } from "@/types";
+import Cookies from "js-cookie";
 
 const APIURL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -21,7 +22,7 @@ export async function getClases(filters?: {
     });
     query = `?${params.toString()}`;
   }
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
   const res = await fetch(`${APIURL}/clases${query}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
   });
@@ -30,7 +31,7 @@ export async function getClases(filters?: {
 }
 
 export async function getClaseById(id: string): Promise<IClase> {
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
   const res = await fetch(`${APIURL}/clases/${id}`, {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
   });

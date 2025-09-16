@@ -1,5 +1,6 @@
 "use client"
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import Cookies from 'js-cookie';
 import { getUserById } from '@/services/userService';
 import type { User, AuthContextType } from '@/types';
 
@@ -10,7 +11,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
+    const storedToken = Cookies.get('token');
     if (storedToken) {
       setToken(storedToken);
       const decoded = decodeToken(storedToken);
@@ -26,7 +27,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const login = async (newToken: string) => {
     setToken(newToken);
-    localStorage.setItem('token', newToken);
+    Cookies.set('token', newToken, { expires: 7 }); // 7 días de expiración
     const decoded = decodeToken(newToken);
     if (decoded?.userId) {
       try {
@@ -43,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem('token');
+    Cookies.remove('token');
   };
 
   function decodeToken(token: string): User | null {

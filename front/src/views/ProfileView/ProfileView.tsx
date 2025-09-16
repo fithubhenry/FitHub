@@ -1,10 +1,13 @@
 "use client";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
+import Cookies from "js-cookie";
 import { useEffect } from "react";
 import { getUserById } from "@/services/userService";
 import { useState } from "react";
 import Image from "next/image";
+import Loader from "@/components/Loader/Loader";
+import { toast } from "react-toastify";
 
 export default function ProfileView() {
   const { user, isAuthenticated, setUser } = useAuth();
@@ -17,7 +20,6 @@ export default function ProfileView() {
     if (user?.userId) {
       getUserById(user.userId)
         .then((data) => {
-          console.log('[DEBUG] Avatar URL recibida:', data.profileImageUrl || data.avatarUrl);
           setFullUser(data);
         })
         .catch(() => setFullUser(null));
@@ -52,7 +54,7 @@ export default function ProfileView() {
     const formData = new FormData();
     formData.append("file", file);
     try {
-      const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/profile-image/${user.userId}`, {
         method: "PATCH",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -60,10 +62,13 @@ export default function ProfileView() {
       });
       if (!res.ok) throw new Error("Error al subir la imagen");
       const data = await res.json();
-      console.log("URL recibida del backend:", data.imageUrl);
       setAvatarUrl(data.imageUrl || "");
       if (user && setUser) {
-        setUser({ ...user, avatarUrl: data.imageUrl || "" });
+        setUser({
+          ...user,
+          avatarUrl: data.imageUrl || "",
+          profileImageUrl: data.imageUrl || ""
+        });
       }
     } catch {
       alert("Error al subir la imagen");
@@ -75,7 +80,7 @@ export default function ProfileView() {
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     if (!user?.userId) return;
-    const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
     const password = (document.getElementById("password") as HTMLInputElement)?.value;
     const confirmPassword = (document.getElementById("confirmPassword") as HTMLInputElement)?.value;
     if (password && password !== confirmPassword) {
@@ -112,11 +117,15 @@ export default function ProfileView() {
         alert(data.message || "Error al actualizar datos");
         return;
       }
-      alert("Datos actualizados correctamente");
+      toast.success("Datos actualizados correctamente");
       setFullUser(data);
-      if (setUser) setUser({ ...user, ...data });
+      if (setUser) setUser({
+        ...user,
+        ...data,
+        profileImageUrl: data.profileImageUrl ?? user.profileImageUrl
+      });
     } catch (err) {
-      alert("Error al actualizar datos");
+      toast.error("Error al actualizar datos");
       console.error('[ERROR PATCH]', err);
     }
   }
@@ -171,7 +180,7 @@ export default function ProfileView() {
         style={{ display: 'none' }}
       />
     )}
-    {uploading && <span className="ml-2 text-xs text-yellow-300">Subiendo...</span>}
+  {uploading && <Loader text="Subiendo imagen..." />}
 
     {/* Aviso para invitados */}
     {esInvitado && (
