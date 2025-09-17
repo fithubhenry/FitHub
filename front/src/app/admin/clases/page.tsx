@@ -1,5 +1,4 @@
-'use client'
-
+'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -45,9 +44,9 @@ export default function ClasesAdminPage() {
     });
   };
 
-  const handleDeleteClase = (id: string) => {
-    setClases(clases.filter(clase => clase.id !== id));
-  };
+//   const handleDeleteClase = (id: string) => {
+//     setClases(clases.filter(clase => clase.id !== id));
+//   };
 
   return (
     <div className="min-h-screen bg-black pt-2 px-2 md:px-6 flex items-start justify-center">
