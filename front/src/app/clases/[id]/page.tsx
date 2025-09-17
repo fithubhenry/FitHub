@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getClaseById } from "@/services/clasesService";
 import ActivityDetailView from "@/views/ActivityDetailView/ActivityDetailView";
 import { IClase } from "@/types";
-import Loader from "@/components/Loader/Loader"; // Ensure Loader is imported to avoid reference error
+import Loader from "@/components/Loader/Loader";
 
 export default function ClaseDetallePage() {
   const { id } = useParams<{ id: string }>();

@@ -154,8 +154,8 @@ export default function ProfileView() {
         )}
       </div>
       <div>
-        <p className="text-white font-semibold">{user?.nombre}</p>
-        <p className="text-gray-300 text-sm">{user?.correo}</p>
+      <p className="text-white font-semibold">{user?.nombre}</p>
+      <p className="text-gray-300 text-sm">Email: {fullUser?.email || user?.email}</p>
       </div>
 
       <span

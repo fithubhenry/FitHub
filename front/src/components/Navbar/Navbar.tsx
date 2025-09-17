@@ -37,12 +37,27 @@ export default function Navbar() {
                 Inicio
               </p>
             </Link>
-            {!isGuest && (
-              <Link href="/clases">
-                <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
-                  Clases
-                </p>
-              </Link>
+            {user?.esAdmin ? (
+              <>
+                <Link href="/admin/clases">
+                  <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
+                    Clases
+                  </p>
+                </Link>
+                <Link href="/admin/usuarios">
+                  <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
+                    Usuarios
+                  </p>
+                </Link>
+              </>
+            ) : (
+              !isGuest && (
+                <Link href="/clases">
+                  <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
+                    Clases
+                  </p>
+                </Link>
+              )
             )}
 
             {/* Links por estado */}
@@ -73,13 +88,6 @@ export default function Navbar() {
               </Link>
             )}
 
-            {isPremium && (
-              <Link href="/misTurnos">
-                <p className="text-[#fee600] font-poppins hover:text-primary transition-colors duration-200">
-                  Mis turnos
-                </p>
-              </Link>
-            )}
 
             {/* Auth / Switch */}
             {isGuest ? (
