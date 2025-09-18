@@ -1,20 +1,27 @@
+export interface IHorario {
+  fecha: string;
+  horaInicio: string;
+  horaFin: string;
+  diaSemana: string;
+  activo: boolean;
+}
+
 export interface IClase {
-    id: string;
-    nombre: string;
-    descripcion: string;
-    intensidad: "muy alta" | "alta" | "media" | "baja";
-    instructor: string;
-    horario: string;
-    duracion: string;
-    capacidad: number;
-    participantes: number;
-    tipo: "Yoga" | "Crossfit" | "Spinning" | "Pilates" | "Zumba" | "Boxeo" | "Funcional";
-    grupo_musculo: "Pierna" | "Brazos" | "Abdomen" | "Espalda" | "Glúteos" | "Cardio";
-    sub_musculo: "biceps" | "triceps" | "cuadriceps" | "abdominal" | "gluteo" | "dorsal" | "pectoral";
-    sede: string;
+  id: string;
+  nombre: string;
+  descripcion: string;
+  intensidad: "muy alta" | "alta" | "media" | "baja";
+  instructor: string;
+  horarios: IHorario[];
+  duracion: string;
+  capacidad: number;
+  participantes: number;
+  tipo: "Yoga" | "Crossfit" | "Spinning" | "Pilates" | "Zumba" | "Boxeo" | "Funcional";
+  grupo_musculo: "Pierna" | "Brazos" | "Abdomen" | "Espalda" | "Glúteos" | "Cardio";
+  sub_musculo: "biceps" | "triceps" | "cuadriceps" | "abdominal" | "gluteo" | "dorsal" | "pectoral";
+  sede: string;
   image: string;
   imageUrl?: string;
-    
 }
 
 export interface IRegisterUser {
