@@ -6,7 +6,6 @@ const APIURL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function register(userData: IRegisterUser) {
   try {
-    console.log("Intentando registrar con:", userData);
 
     const response = await fetch(`${APIURL}/auth/register`, {
       method: "POST",
@@ -42,7 +41,6 @@ export async function register(userData: IRegisterUser) {
 
 export async function login(userData: ILoginUser) {
   try {
-    console.log("Intentando loguear con:", userData);
 
     const response = await fetch(`${APIURL}/auth/login`, {
       method: "POST",

@@ -18,14 +18,12 @@ const LoginView = () => {
   return (
     <div className="min-h-screen bg-black flex items-center justify-center py-8 px-4">
       <div className="max-w-md w-full rounded-2xl border-2 border-[#fee600] p-10 shadow-[6px_8px_24px_0px_rgba(253,230,0,0.4)]">
-        {/* Logo */}
         <div className="text-center mb-8">
           <h1 className="text-4xl tracking-widest font-bold text-[#fee600] mb-2 font-anton">
             FITHUB
           </h1>
         </div>
 
-        {/* Título del formulario */}
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-[#fee600] mb-2 font-sans">
             Inicia Sesión
@@ -52,8 +50,8 @@ const LoginView = () => {
                   router.push('/');
                 }, 1000);
               }
-            } catch (error) {
-              console.error("Error en el login:", error);
+            } catch {
+              // Error ya manejado por toast en el servicio
             } finally {
               setSubmitting(false);
             }
@@ -61,20 +59,16 @@ const LoginView = () => {
         >
           {({ isSubmitting }) => (
             <Form className="space-y-6">
-              {/* Email */}
               <div>
                 <label className="block mb-1 text-sm font-medium text-[#fee600]">Correo Electrónico:</label>
                 <Field
                   name="email"
                   type="email"
                   placeholder="tu@email.com"
-                  className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300
-focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
+                  className="w-full py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
                 />
                 <ErrorMessage name="email" component="div" className="text-red-500 text-sm mt-1" />
               </div>
-
-              {/* Contraseña */}
               <div>
                 <label className="block mb-1 text-sm font-medium text-[#fee600]">Contraseña:</label>
                 <div className="relative">
@@ -82,8 +76,7 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
                     name="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="Tu contraseña"
-                    className="w-full pr-10 py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300
-focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
+                    className="w-full pr-10 py-3 px-4 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] transition-colors duration-200"
                   />
                   <button
                     type="button"
@@ -95,25 +88,16 @@ focus:outline-none focus:ring-2 focus:ring-[#fee600] focus:border-[#fee600] tran
                 </div>
                 <ErrorMessage name="password" component="div" className="text-red-500 text-sm mt-1" />
               </div>
-
-              {/* Botón */}
               <div>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`w-full py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200 hover: cursor-pointer
-                    ${isSubmitting
-                      ? 'bg-gray-600 cursor-not-allowed text-gray-300'
-                      : 'bg-[#fee600] text-black hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#fee600] shadow-lg hover:shadow-xl'
-                    }`}
+                  className={`w-full py-3 px-4 rounded-lg font-medium text-sm transition-all duration-200 hover: cursor-pointer ${isSubmitting ? 'bg-gray-600 cursor-not-allowed text-gray-300' : 'bg-[#fee600] text-black hover:bg-yellow-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#fee600] shadow-lg hover:shadow-xl'}`}
                 >
                   {isSubmitting ? 'Validando...' : 'Iniciar Sesión'}
                 </button>
               </div>
-              {/* Enlace a registro */}
-
             </Form>
-
           )}
         </Formik>
         <div className="mt-4">

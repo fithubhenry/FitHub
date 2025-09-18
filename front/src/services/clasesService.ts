@@ -26,12 +26,13 @@ export async function getClases(filters?: {
   }
   const token = Cookies.get("token");
   const url = `${APIURL}${endpoint}${query}`;
-  console.log('[DEBUG] URL real de la petición:', url);
   const res = await fetch(url, {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
   });
   if (!res.ok) throw new Error("Error al obtener las clases");
-  return await res.json();
+  const data = await res.json();
+  // Filtrar solo clases activas
+  return Array.isArray(data) ? data.filter((clase) => clase.estado === true) : data;
 }
 
 export async function getClaseById(id: string): Promise<IClase> {
