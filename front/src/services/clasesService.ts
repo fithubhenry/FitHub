@@ -11,7 +11,8 @@ export async function getClases(filters?: {
   instructor?: string;
 }): Promise<IClase[]> {
   let query = "";
-  if (filters) {
+  let endpoint = "/clases";
+  if (filters && Object.values(filters).some(Boolean)) {
     const params = new URLSearchParams();
     Object.entries(filters).forEach(([key, value]) => {
       if (Array.isArray(value)) {
@@ -21,9 +22,12 @@ export async function getClases(filters?: {
       }
     });
     query = `?${params.toString()}`;
+    endpoint = "/clases/filtros";
   }
   const token = Cookies.get("token");
-  const res = await fetch(`${APIURL}/clases${query}`, {
+  const url = `${APIURL}${endpoint}${query}`;
+  console.log('[DEBUG] URL real de la petición:', url);
+  const res = await fetch(url, {
     headers: token ? { Authorization: `Bearer ${token}` } : {},
   });
   if (!res.ok) throw new Error("Error al obtener las clases");

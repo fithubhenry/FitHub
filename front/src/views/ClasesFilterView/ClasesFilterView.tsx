@@ -79,18 +79,23 @@ export default function ClasesFilterView() {
     };
     console.log('[DEBUG] Filtros enviados al backend:', filtrosBackend);
 
-    // Construye la query igual que en getClases
-    const params = new URLSearchParams();
-    Object.entries(filtrosBackend).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        value.forEach((v) => params.append(key, v));
-      } else if (value) {
-        params.append(key, value);
-      }
-    });
-    const query = params.toString();
-    const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/clases${query ? `?${query}` : ''}`;
-    console.log('[DEBUG] URL de la petición:', apiUrl);
+    // Construye la URL armada igual que en getClases
+    let query = "";
+    let endpoint = "/clases/filtros";
+    if (Object.values(filtrosBackend).some(Boolean)) {
+      const params = new URLSearchParams();
+      Object.entries(filtrosBackend).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          value.forEach((v) => params.append(key, v));
+        } else if (value) {
+          params.append(key, value);
+        }
+      });
+      query = `?${params.toString()}`;
+      endpoint = "/clases/filtros";
+    }
+    const url = `${process.env.NEXT_PUBLIC_API_URL}${endpoint}${query}`;
+    console.log('[DEBUG] URL armada para la petición:', url);
 
     try {
       const data = await getClases(filtrosBackend);
