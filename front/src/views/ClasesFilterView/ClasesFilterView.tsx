@@ -3,23 +3,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { getClases } from "@/services/clasesService";
 import { IClase } from "@/types";
+import { Filters } from "@/types/clasesFilters";
 import ActivityCard from "@/components/Cards/ActivityCard";
 import Loader from "@/components/Loader/Loader";
 
-type Filters = {
-  tipo: string;
-  grupo_musculo: string;
-  sub_musculo: string;
-  intensidad: string;
-  instructor: string;
-};
 
 const INITIAL_FILTERS: Filters = {
   tipo: "",
   grupo_musculo: "",
   sub_musculo: "",
   intensidad: "",
-  instructor: "",
+  sede: "",
 };
 
 const SELECTS: { key: keyof Filters; label: string }[] = [
@@ -27,7 +21,7 @@ const SELECTS: { key: keyof Filters; label: string }[] = [
   { key: "grupo_musculo", label: "Grupo muscular" },
   { key: "sub_musculo", label: "Sub-músculo" },
   { key: "intensidad", label: "Intensidad" },
-  { key: "instructor", label: "Instructor" },
+  { key: "sede", label: "Sede" },
 ];
 
 export default function ClasesFilterView() {
@@ -35,71 +29,26 @@ export default function ClasesFilterView() {
   const [allClases, setAllClases] = useState<IClase[]>([]);
   const [resultados, setResultados] = useState<IClase[]>([]);
   const [loading, setLoading] = useState(false);
-  // ...existing code...
-
-  const hasFilters = useMemo(
-    () => Object.values(filters).some(Boolean),
-    [filters]
-  );
-
-  const uniques = (arr: unknown[]) => [...new Set(arr.map(String).filter(Boolean))];
-
-  type OptionMap = {
-    tipo: string[];
-    grupo_musculo: string[];
-    sub_musculo: string[];
-    intensidad: string[];
-    instructor: string[];
-  };
-
-  const options: OptionMap = useMemo(() => {
-    return {
-      tipo: [...new Set(allClases.map((a) => a.tipo).filter(Boolean))],
-      grupo_musculo: [...new Set(
-        allClases.flatMap((a) => Array.isArray(a.grupo_musculo) ? a.grupo_musculo.filter(Boolean) : [a.grupo_musculo])
-      )],
-      intensidad: [...new Set(allClases.map((a) => a.intensidad).filter(Boolean))],
-      instructor: [...new Set(allClases.map((a) => a.instructor).filter(Boolean))],
-      sub_musculo: [...new Set(
-        (filters.grupo_musculo
-          ? allClases.filter((a) => Array.isArray(a.grupo_musculo) ? a.grupo_musculo.includes(filters.grupo_musculo) : a.grupo_musculo === filters.grupo_musculo)
-          : allClases
-        ).flatMap((a) => Array.isArray(a.sub_musculo) ? a.sub_musculo.filter(Boolean) : [])
-      )],
-    };
-  }, [allClases, filters.grupo_musculo]);
+  const hasFilters = useMemo(() => Object.values(filters).some(Boolean), [filters]);
+  const options = useMemo(() => ({
+    tipo: [...new Set(allClases.map((a) => a.tipo).filter(Boolean))],
+    grupo_musculo: [...new Set(allClases.flatMap((a) => Array.isArray(a.grupo_musculo) ? a.grupo_musculo.filter(Boolean) : [a.grupo_musculo]))],
+    intensidad: [...new Set(allClases.map((a) => a.intensidad).filter(Boolean))],
+    sede: [...new Set(allClases.map((a) => a.sede).filter(Boolean))],
+    sub_musculo: [...new Set((filters.grupo_musculo
+      ? allClases.filter((a) => Array.isArray(a.grupo_musculo) ? a.grupo_musculo.includes(filters.grupo_musculo) : a.grupo_musculo === filters.grupo_musculo)
+      : allClases).flatMap((a) => Array.isArray(a.sub_musculo) ? a.sub_musculo.filter(Boolean) : []))],
+  }), [allClases, filters.grupo_musculo]);
 
   const buscar = async () => {
     setLoading(true);
-    // Log de los filtros enviados
     const filtrosBackend = {
       ...filters,
       grupo_musculo: filters.grupo_musculo ? [filters.grupo_musculo] : undefined,
       sub_musculo: filters.sub_musculo ? [filters.sub_musculo] : undefined,
     };
-    console.log('[DEBUG] Filtros enviados al backend:', filtrosBackend);
-
-    // Construye la URL armada igual que en getClases
-    let query = "";
-    let endpoint = "/clases/filtros";
-    if (Object.values(filtrosBackend).some(Boolean)) {
-      const params = new URLSearchParams();
-      Object.entries(filtrosBackend).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          value.forEach((v) => params.append(key, v));
-        } else if (value) {
-          params.append(key, value);
-        }
-      });
-      query = `?${params.toString()}`;
-      endpoint = "/clases/filtros";
-    }
-    const url = `${process.env.NEXT_PUBLIC_API_URL}${endpoint}${query}`;
-    console.log('[DEBUG] URL armada para la petición:', url);
-
     try {
       const data = await getClases(filtrosBackend);
-      console.log('[DEBUG] Respuesta filtrada:', data);
       setResultados(data);
       if (!allClases.length) setAllClases(data);
     } catch {
@@ -121,13 +70,11 @@ export default function ClasesFilterView() {
     setLoading(false);
   };
 
-  // carga inicial
   useEffect(() => {
     (async () => {
       setLoading(true);
       try {
         const data = await getClases();
-        console.log('[DEBUG] Todas las clases recibidas:', data);
         setAllClases(data);
         setResultados(data);
       } catch {
@@ -138,7 +85,6 @@ export default function ClasesFilterView() {
     })();
   }, []);
 
-  // si todos vacíos → mostrar todo
   useEffect(() => {
     if (Object.values(filters).every((v) => !v)) {
       setResultados(allClases);
@@ -149,7 +95,6 @@ export default function ClasesFilterView() {
     <div className="p-6 space-y-4">
       <h1 className="text-2xl font-bold">Clases de Gimnasio</h1>
 
-      {/* Selects compactos */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         {SELECTS.map(({ key, label }) => (
           <Select
@@ -195,7 +140,7 @@ export default function ClasesFilterView() {
         {resultados.map((clase) => (
           <ActivityCard
             key={clase.id}
-            {...clase}              // pasa todos los campos de IClase
+            {...clase}
           
           />
           

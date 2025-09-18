@@ -26,9 +26,9 @@ export default function MpButton() {
 
       const data = await res.json();
       if (data.init_point) window.location.href = data.init_point;
-      else console.error("No se recibió init_point");
+      // Error ya manejado por toast en el servicio
     } catch (err) {
-      console.error("Error creando preferencia:", err);
+  // Error ya manejado por toast en el servicio
     } finally {
       setLoading(false);
     }

@@ -13,24 +13,20 @@ export default function ProfileView() {
   const { user, isAuthenticated, setUser } = useAuth();
   const [avatarUrl, setAvatarUrl] = useState<string>("");
   const [uploading, setUploading] = useState(false);
-  const [fullUser, setFullUser] = useState<any>(null);
+  const [fullUser, setFullUser] = useState<typeof user | null>(null);
 
 
   useEffect(() => {
     if (user?.userId) {
       getUserById(user.userId)
-        .then((data) => {
-          setFullUser(data);
-        })
+        .then(setFullUser)
         .catch(() => setFullUser(null));
     }
   }, [user?.userId]);
 
   // Sincroniza avatarUrl local con el global
   useEffect(() => {
-    if (user?.profileImageUrl) {
-      setAvatarUrl(user.profileImageUrl);
-    }
+    if (user?.profileImageUrl) setAvatarUrl(user.profileImageUrl);
   }, [user?.profileImageUrl]);
 
 
@@ -54,7 +50,7 @@ export default function ProfileView() {
     const formData = new FormData();
     formData.append("file", file);
     try {
-  const token = Cookies.get("token");
+      const token = Cookies.get("token");
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/profile-image/${user.userId}`, {
         method: "PATCH",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -71,7 +67,7 @@ export default function ProfileView() {
         });
       }
     } catch {
-      alert("Error al subir la imagen");
+      toast.error("Error al subir la imagen");
     }
     setUploading(false);
   }
@@ -80,16 +76,16 @@ export default function ProfileView() {
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     if (!user?.userId) return;
-  const token = Cookies.get("token");
+    const token = Cookies.get("token");
     const password = (document.getElementById("password") as HTMLInputElement)?.value;
     const confirmPassword = (document.getElementById("confirmPassword") as HTMLInputElement)?.value;
     if (password && password !== confirmPassword) {
-      alert("Las contraseñas no coinciden");
+      toast.error("Las contraseñas no coinciden");
       return;
     }
     const telefonoValue = (document.getElementById("telefono") as HTMLInputElement)?.value;
     const nombreValue = (document.getElementById("nombre") as HTMLInputElement)?.value;
-    const payload: any = {
+    const payload: Record<string, any> = {
       email: (document.getElementById("email") as HTMLInputElement)?.value,
       nombre: nombreValue,
       apellido: (document.getElementById("apellido") as HTMLInputElement)?.value,
@@ -98,7 +94,6 @@ export default function ProfileView() {
       ciudad: (document.getElementById("ciudad") as HTMLInputElement)?.value,
       ...(password ? { password } : {}),
     };
-    // Convertir telefono a número si existe y es válido
     if (telefonoValue && !isNaN(Number(telefonoValue))) {
       payload.telefono = Number(telefonoValue);
     }
@@ -113,8 +108,7 @@ export default function ProfileView() {
       });
       const data = await res.json();
       if (!res.ok) {
-        console.error('[ERROR PATCH]', data);
-        alert(data.message || "Error al actualizar datos");
+        toast.error(data.message || "Error al actualizar datos");
         return;
       }
       toast.success("Datos actualizados correctamente");
@@ -124,9 +118,8 @@ export default function ProfileView() {
         ...data,
         profileImageUrl: data.profileImageUrl ?? user.profileImageUrl
       });
-    } catch (err) {
+    } catch {
       toast.error("Error al actualizar datos");
-      console.error('[ERROR PATCH]', err);
     }
   }
 

@@ -5,6 +5,7 @@ import { Clock, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { toast } from "react-toastify";
 
 type Props = IClase;
 
@@ -41,11 +42,11 @@ function ActivityCard({
   const deshabilitado = esRegistrado;
 
   function manejarClick(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault();
-    e.stopPropagation();
-    if (esInvitado) return router.push("/login");
-    if (esRegistrado) return;
-    alert("Reservado ✅"); // aquí luego integrás la reserva real
+  e.preventDefault();
+  e.stopPropagation();
+  if (esInvitado) return router.push("/login");
+  if (esRegistrado) return;
+  toast.success("Reservado ✅"); // aquí luego integrás la reserva real
   }
 
   return (

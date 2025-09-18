@@ -8,26 +8,13 @@ import { IRegisterUser } from "@/types";
 import { validateFormRegister } from "@/helpers/validate";
 import { register } from "@/services/authService";
 import { GoogleButton } from "@/components/GoogleButton/GoogleButton";
-
-
-interface RegisterFormValues {
-  nombre: string;
-  apellido: string;
-  fecha_nacimiento: string; 
-  email: string;
-  password: string;
-  confirmPassword: string;
-  ciudad: string;
-  direccion: string;
-  telefono: string;
-}
+import { RegisterFormValues } from "@/types/RegisterFormValues";
 
 const RegisterView = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
   
-
   return (
     <div className="min-h-screen bg-black flex items-center justify-center py-8 px-4">
       <div className="max-w-2xl w-full rounded-2xl border-2 border-[#fee600] p-10 shadow-[6px_8px_24px_0px_rgba(253,230,0,0.4)]">
@@ -83,8 +70,7 @@ const RegisterView = () => {
                 }, 1000);
               }
             } catch (error) {
-              console.error("Error en el registro:", error);
-              // Maneja el error, muestra mensaje al usuario, etc.
+              // Error ya manejado por toast en el servicio
             } finally {
               setSubmitting(false);
             }

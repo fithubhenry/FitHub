@@ -13,6 +13,7 @@ export interface IClase {
   intensidad: "muy alta" | "alta" | "media" | "baja";
   instructor: string;
   horarios: IHorario[];
+
   duracion: string;
   capacidad: number;
   participantes: number;
@@ -22,6 +23,9 @@ export interface IClase {
   sede: string;
   image: string;
   imageUrl?: string;
+  estado?: boolean;
+
+
 }
 
 export interface IRegisterUser {
@@ -38,8 +42,8 @@ export interface IRegisterUser {
 
 
 export interface ILoginUser {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
 export interface GoogleButtonProps {
