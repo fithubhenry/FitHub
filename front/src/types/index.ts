@@ -1,10 +1,19 @@
+export interface IHorario {
+  fecha: string;
+  horaInicio: string;
+  horaFin: string;
+  diaSemana: string;
+  activo: boolean;
+}
+
 export interface IClase {
   id: string;
   nombre: string;
   descripcion: string;
   intensidad: "muy alta" | "alta" | "media" | "baja";
   instructor: string;
-  horario: string;
+  horarios: IHorario[];
+
   duracion: string;
   capacidad: number;
   participantes: number;
@@ -15,6 +24,7 @@ export interface IClase {
   image: string;
   imageUrl?: string;
   estado?: boolean;
+
 
 }
 
