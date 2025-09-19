@@ -37,7 +37,20 @@ export default function ActivityDetailView({ clase }: { clase: IClase }) {
           </div>
           <div className="text-sm text-gray-600">
             <p>Instructor: {clase.instructor}</p>
-            <p>Horario: {clase.horario}</p>
+            <div>
+              <span>Horarios:</span>
+              {Array.isArray(clase.horarios) && clase.horarios.length > 0 ? (
+                <ul className="ml-2">
+                  {clase.horarios.map((h, idx) => (
+                    <li key={idx}>
+                      {h.fecha} {h.horaInicio} - {h.horaFin}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <span className="ml-2">No hay horarios disponibles</span>
+              )}
+            </div>
             <p>Tipo: {clase.tipo}</p>
             <p>Grupo muscular: {clase.grupo_musculo}</p>
             <p>Músculo específico: {clase.sub_musculo}</p>

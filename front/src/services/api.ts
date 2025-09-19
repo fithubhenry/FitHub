@@ -19,7 +19,12 @@ const api = {
       headers,
     });
     if (!res.ok) throw new Error('Error en GET ' + path);
-    return res.json();
+    const contentType = res.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return res.json();
+    } else {
+      return res.text();
+    }
   },
   post: async (path: string, body: any) => {
     const headers = { 'Content-Type': 'application/json', ...getAuthHeaders() };
@@ -58,7 +63,13 @@ const api = {
       headers,
     });
     if (!res.ok) throw new Error('Error en DELETE ' + path);
-    return res.json();
+    if (res.status === 204) return null;
+    const contentType = res.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return res.json();
+    } else {
+      return res.text();
+    }
   },
 };
 
