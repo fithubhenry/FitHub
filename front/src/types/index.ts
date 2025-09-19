@@ -1,31 +1,39 @@
 export interface IHorario {
-  fecha: string;
-  horaInicio: string;
-  horaFin: string;
-  diaSemana: string;
-  activo: boolean;
+  fecha: string;        // "YYYY-MM-DD"
+  horaInicio: string;   // "HH:mm:ss"
+  horaFin?: string;
 }
 
+// ⚠️ Para evitar más errores, dejo la mayoría de campos como `string`.
+//    Lo importante es que ahora existen `fecha`, `horaInicio`, `horario` y `horarios`.
 export interface IClase {
   id: string;
   nombre: string;
   descripcion: string;
+
+  // datos misceláneos
+  duracion: string;
+  capacidad?: number;
+  participantes: number;
   intensidad: "muy alta" | "alta" | "media" | "baja";
   instructor: string;
-  horarios: IHorario[];
-
-  duracion: string;
-  capacidad: number;
-  participantes: number;
-  tipo: "Yoga" | "Crossfit" | "Spinning" | "Pilates" | "Zumba" | "Boxeo" | "Funcional";
-  grupo_musculo: "Pierna" | "Brazos" | "Abdomen" | "Espalda" | "Glúteos" | "Cardio";
-  sub_musculo: "biceps" | "triceps" | "cuadriceps" | "abdominal" | "gluteo" | "dorsal" | "pectoral";
+  tipo: string;
+  grupo_musculo: string;
+  sub_musculo: string;
   sede: string;
-  image: string;
+  image?: string;
   imageUrl?: string;
-  estado?: boolean;
 
+  // estado de disponibilidad
+  estado?: boolean; // ← tus servicios filtraban por `clase.estado === true`
 
+  // ⬇️ HORARIO (modelo de negocio: una sola fecha/hora por clase)
+  fecha?: string;          // "YYYY-MM-DD"
+  horaInicio?: string;     // "HH:mm:ss"
+  horario?: string;        // si el back lo manda con este nombre
+
+  // ⬇️ si el back eventualmente envía array, seguimos soportándolo
+  horarios?: IHorario[];
 }
 
 export interface IRegisterUser {
