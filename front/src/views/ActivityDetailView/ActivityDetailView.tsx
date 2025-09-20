@@ -36,26 +36,42 @@ export default function ActivityDetailView({ clase }: { clase: IClase }) {
 
   const disabled = !canReserve || !slot;
 
-  async function reservar() {
+async function reservar() {
   if (!isAuthenticated) return router.push("/login");
 
-  const usuarioId = (user as any)?.id ?? (user as any)?.userId ?? (user as any)?.sub;
-
-  const fechaISO = (clase.fecha ?? "").slice(0, 10);
-  const hRaw = clase.horaInicio ?? clase.horario ?? "";
-  const horaInicioFmt = hRaw.length === 5 ? `${hRaw}:00` : hRaw;
-
+  const usuarioId =
+    (user as any)?.id ?? (user as any)?.userId ?? (user as any)?.sub;
   if (!usuarioId) return toast.error("No se encontró tu ID de usuario");
-  if (!fechaISO || !horaInicioFmt) return toast.error("La clase no tiene fecha/horario definido");
+
+  // slot ya lo calculás arriba (fecha + horaInicio)
+  if (!slot?.fecha || !slot?.horaInicio) {
+    return toast.error("La clase no tiene fecha/horario definido");
+  }
+
+  // normalizo formatos
+  const fecha = slot.fecha.slice(0, 10);
+  const horaInicio = slot.horaInicio.length === 5
+    ? `${slot.horaInicio}:00`
+    : slot.horaInicio;
+
+  // si tu back pide horaFin, calculala (+1h) o quítala si no es requerida
+  const add1h = (hhmmss: string) => {
+    const [hh, mm, ss = "00"] = hhmmss.split(":");
+    const d = new Date(0, 0, 0, +hh, +mm, +ss as any);
+    d.setHours(d.getHours() + 1);
+    const pad = (n: number) => String(n).padStart(2, "0");
+    return `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  };
+  const horaFin = add1h(horaInicio); // ← quita esta línea si el back no la usa
 
   try {
     await TurnosService.crear({
       usuarioId,
       claseId: clase.id,
-      fecha: fechaISO,
-      horaInicio: horaInicioFmt,
-      estado: "PENDIENTE", // <- NUEVO
-      descripcion: `Reserva de ${clase.nombre} - ${fechaISO} ${horaInicioFmt}`, // <- NUEVO
+      fecha,
+      horaInicio,
+      horaFin, // ← quítalo si tu back no lo pide
+      // ❌ NO mandar: estado, descripcion
     });
     toast.success("¡Reserva realizada!");
     router.push("/misTurnos");
@@ -63,6 +79,9 @@ export default function ActivityDetailView({ clase }: { clase: IClase }) {
     toast.error(err?.message ?? "No se pudo reservar");
   }
 }
+
+
+
 
 
   return (

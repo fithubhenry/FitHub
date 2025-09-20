@@ -1,38 +1,60 @@
-// src/services/turnos.ts
-import api from "./api"; // o "./apis"
+import Cookies from "js-cookie";
 
 export type EstadoTurno = "PENDIENTE" | "CONFIRMADO" | "CANCELADO";
 
-export interface CrearTurnoDTO {
+export type CrearTurnoDTO = {
   usuarioId: string;
   claseId: string;
-  fecha: string;         // "YYYY-MM-DD"
-  horaInicio: string;    // "HH:mm:ss"
-  estado?: EstadoTurno;  // si el back lo pide obligatorio, lo mandamos
-  descripcion?: string;  // <- NUEVO (si el back lo espera)
-}
-
-type ClaseLite = { id: string; nombre?: string };
-
-export interface ITurno {
-  id: string;
-  fecha: string;
-  estado: EstadoTurno;
-  horaInicio?: string;
-  horaFin?: string;
-  diaSemana?: string;
-  activo: boolean;
-  descripcion?: string;   // <- NUEVO
-  user: { id: string; email: string; nombre?: string };
-  clase: ClaseLite | ClaseLite[];
-}
-
-const TurnosService = {
-  crear: (dto: CrearTurnoDTO) => api.post("/turnos", dto) as Promise<ITurno>,
-  mis: (usuarioId: string)    => api.get(`/turnos/usuario/${usuarioId}`) as Promise<ITurno[]>,
-  actualizarEstado: (id: string, estado: EstadoTurno) =>
-    api.patch(`/turnos/${id}/estado`, { estado }) as Promise<ITurno>,
-  cancelar: (id: string)      => TurnosService.actualizarEstado(id, "CANCELADO"),
+  fecha: string;       // YYYY-MM-DD
+  horaInicio: string;  // HH:mm:ss
+  horaFin: string;     // HH:mm:ss
 };
 
-export default TurnosService;
+const APIURL = process.env.NEXT_PUBLIC_API_URL!;
+
+async function crear(dto: CrearTurnoDTO) {
+  const token = Cookies.get("token");
+  const res = await fetch(`${APIURL}/turnos`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify(dto),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || "Error al crear turno");
+  }
+  return res.json();
+}
+
+// (opcionales)
+async function mis(usuarioId: string) {
+  const token = Cookies.get("token");
+  const res = await fetch(`${APIURL}/turnos/usuario/${usuarioId}`, {
+    headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+  });
+  if (!res.ok) throw new Error("Error al obtener turnos");
+  return res.json();
+}
+async function actualizarEstado(id: string, estado: EstadoTurno) {
+  const token = Cookies.get("token");
+  const res = await fetch(`${APIURL}/turnos/${id}/estado`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({ estado }),
+  });
+  if (!res.ok) throw new Error("No se pudo actualizar estado");
+  return res.json();
+}
+async function cancelar(id: string) {
+  return actualizarEstado(id, "CANCELADO");
+}
+
+const TurnosService = { crear, mis, actualizarEstado, cancelar };
+export default TurnosService;               // 👈👈 clave
+export { crear, mis, actualizarEstado, cancelar }; // opcional
