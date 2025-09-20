@@ -79,7 +79,7 @@ export default function ClasesAdminPage() {
         horaFin: formatHora(form.horarios[0].horaFin),
       }];
       payload.horarios = horarios;
-      if (!form.imageUrl) payload.imageUrl = 'https://example.com/image.jpg';
+
       console.log('Payload a enviar:', payload);
       const nuevaClase = await apiClases.post('/clases', payload);
       console.log('Respuesta del backend:', nuevaClase);
@@ -132,7 +132,6 @@ export default function ClasesAdminPage() {
           <input type="date" name="horarios.fecha" placeholder="Fecha" value={form.horarios[0].fecha} onChange={handleChange} className="border border-[#fee600] bg-black text-white px-2 py-1 rounded w-full focus:ring-2 focus:ring-[#fee600]" />
           <input type="time" name="horarios.horaInicio" placeholder="Hora inicio" value={form.horarios[0].horaInicio} onChange={handleChange} className="border border-[#fee600] bg-black text-white px-2 py-1 rounded w-full focus:ring-2 focus:ring-[#fee600]" />
           <input type="time" name="horarios.horaFin" placeholder="Hora fin" value={form.horarios[0].horaFin} onChange={handleChange} className="border border-[#fee600] bg-black text-white px-2 py-1 rounded w-full focus:ring-2 focus:ring-[#fee600]" />
-          <input type="text" name="imageUrl" placeholder="URL de imagen (opcional)" value={form.imageUrl} onChange={handleChange} className="border border-[#fee600] bg-black text-white px-2 py-1 rounded w-full focus:ring-2 focus:ring-[#fee600]" />
         </div>
         {/* Selects en una fila */}
         <div className="col-span-1 sm:col-span-2 md:col-span-3 lg:col-span-4 grid grid-cols-1 sm:grid-cols-4 gap-2">
