@@ -6,6 +6,26 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "react-toastify";
+import TurnosService from "@/services/turnos";
+
+// ✅ define un horario "válido" para TS
+type HorarioOk = { fecha: string; horaInicio: string; horaFin: string };
+
+function isHorarioOk(x: any): x is HorarioOk {
+  return (
+    x &&
+    typeof x.fecha === "string" &&
+    typeof x.horaInicio === "string" &&
+    typeof x.horaFin === "string"
+  );
+}
+
+const HORARIO_FALLBACK: HorarioOk = {
+  fecha: "2025-10-03",
+  horaInicio: "10:00:00",
+  horaFin: "11:00:00",
+};
+
 
 type Props = IClase;
 
@@ -24,7 +44,11 @@ function ActivityCard({
   participantes,
   intensidad,
   imageUrl,
-  
+  // Estos pueden existir en tu IClase, pero ya NO se usan para el POST:
+  fecha,
+  horaInicio,
+  horario,
+  horarios,
 }: Props) {
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
@@ -33,21 +57,43 @@ function ActivityCard({
   const esRegistrado = isAuthenticated && user?.estado === "Invitado";
   const esPremium = isAuthenticated && user?.estado === "Activo";
 
-  const textoBoton = esPremium
-    ? "Reservar Clase"
-    : esRegistrado
-    ? "Solo Premium"
-    : "Iniciar sesión";
-
+  const textoBoton = esPremium ? "Reservar Clase" : esRegistrado ? "Solo Premium" : "Iniciar sesión";
   const deshabilitado = esRegistrado;
 
-  function manejarClick(e: React.MouseEvent<HTMLButtonElement>) {
+async function manejarClick(e: React.MouseEvent<HTMLButtonElement>) {
   e.preventDefault();
   e.stopPropagation();
+
   if (esInvitado) return router.push("/login");
-  if (esRegistrado) return;
-  toast.success("Reservado ✅"); // aquí luego integrás la reserva real
+  if (esRegistrado) return; // solo premium puede reservar
+
+  try {
+    // 1) sacar datos reales
+    const usuarioId = user!.userId;   // viene del AuthContext
+    const claseId = id;               // prop de la card
+
+    // 2) elegir un horario válido (con narrowing)
+const h: HorarioOk = isHorarioOk(horarios?.[0]) ? horarios![0] : HORARIO_FALLBACK;
+
+// 3) crear turno
+await TurnosService.crear({
+  usuarioId,
+  claseId,
+  fecha: h.fecha,          // 'YYYY-MM-DD'
+  horaInicio: h.horaInicio,// 'HH:mm:ss'
+  horaFin: h.horaFin,      // 'HH:mm:ss'
+});
+
+
+    toast.success("¡Reserva realizada!");
+    router.push("/misTurnos");
+  } catch (err: any) {
+    // mostrará el texto devuelto por el back si TurnosService hace res.text()
+    toast.error(err?.message ?? "No se pudo reservar");
   }
+}
+
+
 
   return (
     <Link
@@ -57,8 +103,10 @@ function ActivityCard({
       <div className="relative h-48 overflow-hidden">
         <img
           src={imageUrl || "/placeholder.svg"}
+
           alt={nombre}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          onError={(e) => { e.currentTarget.src = "/placeholder.svg"; }}
         />
         <div className="absolute inset-0 bg-black/20 transition-colors duration-300 group-hover:bg-black/10" />
       </div>
@@ -106,3 +154,4 @@ function ActivityCard({
 }
 
 export default ActivityCard;
+
